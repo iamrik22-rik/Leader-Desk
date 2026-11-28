@@ -1,0 +1,1081 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OPPO Care+ Leader Desk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: sign-in card, then a leader header over a stacked desk: KPI row, ASM bars + alerts, then a role-wise table. */
+:root{
+  --bg:#eef4f0; --surface:#ffffff; --ink:#0f2219; --muted:#55695e; --line:#d6e2da;
+  --accent:#0b7a46; --accent-soft:#dcf1e4; --good:#0b7a46; --warn:#a86400; --bad:#c0392b;
+  --warn-soft:#fff1db; --bad-soft:#fde5e2;
+  --gold:#a87a12; --gold-hi:#e9c25a; --gold-soft:#fbf2d9; --brand-1:#03190d; --brand-2:#0a4f2c; --on-brand:#ffffff; --on-brand-muted:#cfe3d6; --on-accent:#ffffff;
+  --display:"Manrope",system-ui,sans-serif; --body:"Inter",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#05120b; --surface:#0c1f15; --ink:#e7f1ea; --muted:#94ab9d; --line:#1f3a2b;
+  --accent:#36d283; --accent-soft:#11331f; --good:#36d283; --warn:#f0a43a; --bad:#ff7a6b;
+  --warn-soft:#3a2a12; --bad-soft:#3d1c18;
+  --gold:#e6bf55; --gold-hi:#f3d77e; --gold-soft:#33290f; --brand-1:#020c06; --brand-2:#0a3d22; --on-brand:#ffffff; --on-brand-muted:#b9d3c3; --on-accent:#03170b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#05120b; --surface:#0c1f15; --ink:#e7f1ea; --muted:#94ab9d; --line:#1f3a2b;
+  --accent:#36d283; --accent-soft:#11331f; --good:#36d283; --warn:#f0a43a; --bad:#ff7a6b;
+  --warn-soft:#3a2a12; --bad-soft:#3d1c18;
+  --gold:#e6bf55; --gold-hi:#f3d77e; --gold-soft:#33290f; --brand-1:#020c06; --brand-2:#0a3d22; --on-brand:#ffffff; --on-brand-muted:#b9d3c3; --on-accent:#03170b; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0}
+.note{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;font-weight:500;margin:0 0 12px}
+.num{font-variant-numeric:tabular-nums}
+.login{max-width:400px;margin:8vh auto 0;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;display:grid;gap:16px}
+.login h1{font-size:24px}
+.login p{margin:0;color:var(--muted)}
+label{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);display:grid;gap:6px}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;font-weight:600;cursor:pointer;border-radius:8px;border:0;padding:10px 14px;background:var(--accent);color:var(--surface)}
+button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.err{color:var(--bad);font-size:13px;min-height:1.2em;margin:0}
+.hint{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;margin-bottom:8px}
+.who h1{font-size:22px}
+.who span{color:var(--muted);font-size:13px}
+.ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.stamp{font-size:12px;color:var(--muted)}
+.ctrls select{width:auto}
+.range{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+.range input{width:auto;padding:6px 8px}
+.hnote{font-size:12px;color:var(--warn);margin:0 0 8px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-block:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;gap:4px;align-content:start}
+.kpi .l{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.kpi .v{font-family:var(--display);font-size:24px;font-weight:800}
+.d-up{color:var(--good);font-weight:600}.d-dn{color:var(--bad);font-weight:600}
+.kpi .s{font-size:13px;color:var(--muted)}
+.bar{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.panel h2{font-size:16px;margin-bottom:12px}
+.hbars{display:grid;gap:10px}
+.hb{display:grid;gap:4px}
+.hb div:first-child{display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.hb span.m{color:var(--muted)}
+.pill{font-size:12px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.p-good{background:var(--accent-soft);color:var(--good)}
+.p-warn{background:var(--warn-soft);color:var(--warn)}
+.p-bad{background:var(--bad-soft);color:var(--bad)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center}
+.tabs button{background:transparent;color:var(--muted);border:1px solid var(--line);padding:6px 12px}
+.tabs button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+.tabs input{width:auto;flex:1 1 180px;padding:6px 10px}
+.tscroll{overflow-x:auto;max-height:560px;overflow-y:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{position:sticky;top:0;background:var(--surface);text-align:left;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.r,th.r{text-align:right}
+.mt{margin-top:12px}
+.alerts{display:grid;gap:8px}
+.alert{font-size:13px;padding:8px 10px;border-radius:8px}
+.a-bad{background:var(--bad-soft);color:var(--bad)}
+.a-warn{background:var(--warn-soft);color:var(--warn)}
+.a-good{background:var(--accent-soft);color:var(--good)}
+.more{font-size:12px;color:var(--muted)}
+.planmix{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.pm{border:1px solid var(--line);border-radius:10px;padding:12px;display:grid;gap:6px;cursor:pointer;background:var(--surface);color:var(--ink);text-align:left;font:inherit}
+.pm[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.pm b{font-family:var(--display);font-size:20px}
+.pm .m{font-size:12px;color:var(--muted)}
+.views{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:4px 0 12px}
+.views{overflow-x:auto;scrollbar-width:none}.views button{white-space:nowrap;flex:none}
+@media (max-width:480px){.views button{padding:10px 8px}}
+.views button{background:transparent;color:var(--muted);border-radius:0;border-bottom:2px solid transparent;padding:10px 14px}
+.views button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.views .cnt{font-size:11px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:1px 7px;margin-left:6px}
+.trend svg{width:100%;height:200px;display:block}
+.trend .ax{fill:var(--muted);font-size:10px;font-family:var(--body)}
+.trend rect.b{fill:var(--accent);opacity:.85} .trend rect.b.on{opacity:1;fill:var(--warn)} .trend rect.hit{fill:transparent;cursor:pointer}
+.tday{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:baseline;background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:13px}
+.tday b{font-family:var(--display);font-size:15px}
+.trend line{stroke:var(--line)}
+.lb{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.lb li{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:center;font-size:13px;padding:6px 0;border-bottom:1px solid var(--line)}
+.lb li:last-child{border-bottom:0}
+.lb .rk{font-family:var(--display);font-weight:800;color:var(--muted)}
+.lb .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb .nm small{display:block;color:var(--muted);font-size:12px}
+.camps{display:grid;gap:12px}
+.camp{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.camp>*{min-width:0}
+.camp header{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.camp h2{font-size:18px}
+.camp .meta{color:var(--muted);font-size:13px}
+.camp .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.camp .stats div{display:grid}.camp .stats b{font-family:var(--display);font-size:20px}
+.camp .stats span{font-size:12px;color:var(--muted)}
+.camp p{margin:0}
+.slabs{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.slab{border:1px solid var(--line);border-radius:10px;padding:10px;display:grid;gap:2px;text-align:center}
+.slab b{font-family:var(--display);font-size:22px}.slab span{font-size:12px;color:var(--muted)}
+.slab.s5{background:var(--accent-soft);border-color:var(--accent)}.slab.s5 b{color:var(--good)}
+.slab.s0{background:var(--bad-soft)}.slab.s0 b{color:var(--bad)}
+.slabbar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:10px 0 4px;background:var(--line)}
+.slabbar i{display:block;height:100%}
+@media (max-width:620px){.slabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.lrank .hd{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.lrank .hd h2{margin:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:var(--surface);color:var(--ink);border-radius:0;padding:6px 12px;font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--surface)}
+.myrank{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.myrank div{background:var(--accent-soft);border-radius:10px;padding:10px 14px;display:grid;gap:2px}
+.myrank b{font-family:var(--display);font-size:22px}
+.lb li.me{background:var(--accent-soft);border-radius:6px}
+.camp .poster{display:block;width:100%;max-width:420px;height:auto;border-radius:10px;justify-self:center}
+.camp details summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--accent)}
+.daychips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.daychips button{flex:0 0 auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:6px 10px;font-size:12px;display:grid;justify-items:center;gap:1px;min-width:54px}
+.daychips button small{font-weight:500;color:var(--muted);font-size:11px}
+.daychips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.daychips button[aria-pressed="true"] small{color:var(--surface)}
+.daychips button.won:not([aria-pressed="true"]){border-color:var(--good)}
+.rank{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.rank li{display:grid;grid-template-columns:26px minmax(0,1fr) 76px;gap:8px;align-items:center;padding:7px 6px;border-radius:8px;font-size:13px}
+.rank li.me{background:var(--accent-soft)}
+.rank .rk{font-family:var(--display);font-weight:800;color:var(--muted);text-align:center}
+.rank .who{display:grid;gap:4px;min-width:0}.rank .who b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.rank .bar{height:6px}.rank .n{text-align:right;font-weight:700}.rank .n small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+.rank li.win .bar i{background:var(--good)}.rank li.win .n{color:var(--good)}
+.camp .you{background:var(--accent-soft);border-radius:10px;padding:12px 14px;display:grid;gap:4px}
+.camp .you b.big{font-family:var(--display);font-size:22px}
+.winlist{display:grid;gap:6px;font-size:13px;margin:0;padding:0;list-style:none}
+.winlist li{display:flex;gap:8px;justify-content:space-between;border-bottom:1px solid var(--line);padding:6px 0}.winlist li:last-child{border-bottom:0}
+.cstrip{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between;background:var(--accent-soft);border-radius:10px;padding:10px 14px;margin:0 0 12px;font-size:13px}
+.cstrip button{padding:6px 12px;font-size:13px}
+.wnote{border:2px solid #c9a227;background:color-mix(in srgb,#c9a227 14%,var(--bg, #fff));border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:14px;line-height:1.45}
+.zban{border:2px solid #d9534f;background:color-mix(in srgb,#d9534f 12%,var(--bg, #fff));border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:14px;line-height:1.45}
+.zban b.t{display:block;font-size:17px;color:#c9302c;margin-bottom:4px}
+.zban small{display:block;opacity:.75;margin-top:6px;font-size:12px}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:32px 20px;text-align:center;color:var(--muted)}
+.empty h2{color:var(--ink);font-size:18px;margin-bottom:6px}
+@media (max-width:1000px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.grid2{grid-template-columns:minmax(0,1fr)}.camp .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .4s}}
+.poster{max-width:440px;margin:6vh auto 0;border-radius:20px;padding:40px 28px 28px;text-align:center;color:#fff;background:radial-gradient(120% 90% at 50% 0%,#18a873 0%,#0a7d55 45%,#06402c 100%);box-shadow:0 20px 50px rgba(6,64,44,.35);display:grid;gap:14px;position:relative;overflow:hidden}
+.poster:before,.poster:after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.07)}
+.poster:before{width:260px;height:260px;top:-120px;right:-90px}.poster:after{width:200px;height:200px;bottom:-110px;left:-70px}
+.poster .brand{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;opacity:.85}
+.poster .std{font-family:var(--display);font-weight:800;font-size:44px;line-height:1.05;margin:6px 0 0}
+.poster .date{font-family:var(--display);font-weight:800;font-size:56px;letter-spacing:.04em;background:#fff;color:#0a7d55;border-radius:14px;padding:6px 10px;margin:4px auto;display:inline-block}
+.poster p{margin:0;font-size:16px;line-height:1.5;opacity:.95;position:relative}
+.poster .cd{font-family:var(--mono);font-size:13px;opacity:.85}
+.poster button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.5);font-size:13px;justify-self:center;position:relative;margin-top:6px}
+
+/* brand theme from the OPPO Care+ shield logo: emerald + gold on deep green */
+body{background:radial-gradient(1200px 500px at 50% -200px,var(--accent-soft),transparent 70%),var(--bg)}
+button{color:var(--on-accent)}
+.logo{width:56px;height:56px;border-radius:14px;flex:0 0 auto;box-shadow:0 0 0 2px var(--gold-hi),0 4px 14px rgba(0,0,0,.35);object-fit:cover}
+.top{background:linear-gradient(135deg,var(--brand-1) 0%,var(--brand-2) 100%);border-radius:16px;padding:14px 16px;border-bottom:3px solid var(--gold-hi);color:var(--on-brand);margin-bottom:12px;box-shadow:0 6px 20px rgba(3,25,13,.18)}
+.top .idt{display:flex;gap:12px;align-items:center;min-width:0}
+.top .who h1{color:var(--on-brand)}
+.top .who span,.top .stamp{color:var(--on-brand-muted)}
+.top .brandline{font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-hi);display:block}
+.top select,.top .range input{background:rgba(255,255,255,.1);color:var(--on-brand);border-color:rgba(255,255,255,.28)}
+.top select option{color:#0f2219;background:#fff}
+.top .range{color:var(--on-brand-muted)}
+.top button.ghost{color:var(--on-brand);border-color:rgba(255,255,255,.35)}
+.top button.ghost:hover{background:rgba(255,255,255,.08)}
+.top #xls{background:linear-gradient(180deg,var(--gold-hi),#c9971f);color:#1d1503;border-color:transparent}
+.login{padding:0;overflow:hidden;border-color:var(--line);box-shadow:0 10px 30px rgba(3,25,13,.12)}
+.login .lhead{background:linear-gradient(160deg,var(--brand-1),var(--brand-2));border-bottom:3px solid var(--gold-hi);padding:22px 24px 18px;display:grid;justify-items:center;gap:10px;text-align:center}
+.login .lhead img{width:112px;height:112px;border-radius:24px;box-shadow:0 0 0 2px var(--gold-hi),0 8px 24px rgba(0,0,0,.4)}
+.login .lhead h1{color:#fff;font-size:22px}
+.login .lhead span{color:var(--gold-hi);font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.login .lbody{padding:20px 24px 24px;display:grid;gap:14px}
+.views button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--gold-hi)}
+.kpi{border-top:3px solid var(--gold-hi)}
+.panel h2,.camp h2{color:var(--ink)}
+.lb li:nth-child(-n+3) .rk{color:var(--gold)}
+
+/* chat assistant */
+.cfab{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:50;border-radius:999px;padding:12px 16px;display:flex;gap:8px;align-items:center;background:linear-gradient(135deg,var(--brand-2),var(--accent));color:#fff;box-shadow:0 0 0 2px var(--gold-hi),0 8px 24px rgba(0,0,0,.3)}
+.cfab svg{width:20px;height:20px}
+.chat{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:60;width:min(400px,calc(100vw - 24px));height:min(600px,calc(100dvh - 24px));background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 48px rgba(0,0,0,.35);display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;overflow:hidden}
+.chat .ch{background:linear-gradient(135deg,var(--brand-1),var(--brand-2));border-bottom:2px solid var(--gold-hi);color:#fff;padding:10px 12px;display:flex;gap:10px;align-items:center}
+.chat .ch img{width:32px;height:32px;border-radius:8px}
+.chat .ch b{font-family:var(--display);display:block;font-size:14px}.chat .ch small{color:var(--on-brand-muted);font-size:11px}
+.chat .ch button{margin-left:auto;background:transparent;border:1px solid rgba(255,255,255,.35);color:#fff;padding:4px 10px}
+.chat .msgs{overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.chat .m{max-width:88%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+.chat .m.bot{background:var(--accent-soft);color:var(--ink);align-self:flex-start;border-bottom-left-radius:4px}
+.chat .m.me{background:var(--accent);color:var(--on-accent);align-self:flex-end;border-bottom-right-radius:4px}
+.chat .m ul{margin:4px 0 0;padding-left:18px}.chat .m p{margin:0 0 4px}.chat .m p:last-child{margin:0}
+.chat .m a{color:var(--accent);font-weight:600}
+.chat .sugg{display:flex;gap:6px;overflow-x:auto;padding:0 12px 8px;scrollbar-width:none}
+.chat .sugg button{flex:0 0 auto;background:var(--surface);color:var(--accent);border:1px solid var(--accent);padding:5px 10px;font-size:12px;border-radius:999px}
+.chat form{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line)}
+.chat form input{flex:1;min-width:0}
+
+/* app layout (25 Nov, Rik): phone-first single column, period chips, bottom tab bar */
+.wrap:has(#desk:not([hidden])){max-width:760px;padding-top:0;padding-bottom:calc(32px + env(safe-area-inset-bottom,0px))}
+.app .abar{position:relative;z-index:30;display:grid;grid-template-columns:minmax(0,1fr);justify-content:stretch;gap:6px;border-radius:0 0 18px 18px;margin:0 -16px 10px;padding:12px 16px 10px;padding-top:max(12px,env(safe-area-inset-top,0px))}
+@media (min-width:792px){.app .abar{margin-inline:0}}
+.app .abar .idt{display:flex;gap:10px;align-items:center}
+.app .abar .who{flex:1;min-width:0}
+.app .abar .who h1{font-size:18px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app .abar .who span{display:block;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app .abar .logo{width:42px;height:42px;border-radius:11px}
+.app .abar .srow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.app .abar .rbtn{flex:none;width:38px;height:38px;padding:0;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:var(--on-brand)}
+.app .abar .rbtn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.app .abar .rbtn.spin svg{animation:rsp 0.9s linear infinite}.app .abar .rbtn.off{border-color:var(--bad);color:#ffb4aa}
+@keyframes rsp{to{transform:rotate(360deg)}}
+.app .abar .stamp{font-size:12px}
+.app .abar select{background:rgba(255,255,255,.1);color:var(--on-brand);border-color:rgba(255,255,255,.28);padding:8px 10px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -16px 10px;padding:2px 16px}
+.chips::-webkit-scrollbar{display:none}
+.chips button{flex:none;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:13px}
+.chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.app .range{display:flex;margin:0 0 10px}.app .range input{flex:1;padding:8px}
+.fpill{margin:0 0 10px;font-size:13px;background:var(--gold-soft);border-radius:10px;padding:8px 12px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.fpill button{padding:4px 10px;font-size:12px}
+.app .kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 12px}
+.app .kpi{padding:12px 14px;border-radius:14px}
+.app .kpi .v{font-size:22px}
+.app .kpi .s{font-size:12px}
+.app .kpi.big{grid-column:1/-1;background:linear-gradient(135deg,var(--brand-2),var(--accent));color:#fff;border-top-color:var(--gold-hi)}
+.app .kpi.big .l,.app .kpi.big .s{color:rgba(255,255,255,.85)}.app .kpi.big .v{font-size:34px;color:#fff}
+.app .kpi.big .d-up,.app .kpi.big .d-dn{color:#fff}
+.app .panel{border-radius:14px;padding:14px}
+.app .grid2{grid-template-columns:minmax(0,1fr)}
+.app h3.sub{font-size:14px;margin:0 0 6px;font-family:var(--display)}
+.lb li.tot{border-top:2px solid var(--line);border-bottom:0;font-weight:700}
+.lb li.nx .nm{color:var(--warn)}
+.lb .tag{display:inline-block;font-size:10px;font-weight:600;background:var(--warn-soft);color:var(--warn);border-radius:6px;padding:0 6px;margin-left:6px;vertical-align:1px}
+.showall{margin-top:8px;width:100%;background:transparent;color:var(--accent);border:1px solid var(--line)}
+.bnav{position:sticky;top:0;z-index:40;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border:1px solid var(--line);border-radius:14px;margin:0 0 10px;padding:5px;padding-top:max(5px,env(safe-area-inset-top,0px));box-shadow:0 6px 18px rgba(3,25,13,.10)}
+.bnav button{position:relative;background:transparent;color:var(--muted);display:grid;justify-items:center;gap:2px;padding:6px 2px;font-size:11px;font-weight:600;border-radius:10px}
+.bnav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.bnav button[aria-current="page"]{color:var(--accent);background:var(--accent-soft)}
+.bnav .dot{position:absolute;top:4px;right:calc(50% - 18px);width:9px;height:9px;border-radius:50%;background:var(--bad)}
+.menu{display:grid;gap:10px}.menu h2{margin:0}.menu button{justify-self:start}
+.app .tscroll{max-height:none}
+.cfab{bottom:max(16px,env(safe-area-inset-bottom,0px))!important;left:auto!important;right:max(16px,env(safe-area-inset-right,0px));padding:10px 14px}
+.chat{bottom:max(12px,env(safe-area-inset-bottom,0px))!important;height:min(600px,calc(100dvh - 24px))!important}
+@media (min-width:600px){.app .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+</style>
+
+<div class="wrap">
+  
+
+  <section class="poster" id="poster" hidden aria-label="Launch announcement">
+    <span class="brand">OPPO Care+ Leader Desk</span>
+    <h1 class="std">Save the Date</h1>
+    <span class="date">28.11.26</span>
+    <p>The app will launch with proper data.<br>Your team's live sales, targets and campaigns, all in one place.</p>
+    <span class="cd" id="posterCd"></span>
+    <p class="cd" id="posterMsg" hidden></p>
+    <button type="button" id="posterSignin">Admin sign in</button>
+  </section>
+
+  <form class="login" id="loginForm">
+    <div class="lhead"><img src="logo.jpg" alt="OPPO Care+ logo"><span>OPPO Care+</span><h1>Leader Desk</h1></div>
+    <div class="lbody">
+    <p>Enter your Project Leader ID and access code to see your team's OPPO Care+ sales.</p>
+    <label for="plId">Leader ID<input id="plId" autocomplete="username" placeholder="e.g. P030552036" required></label>
+    <label for="plCode">Access code<input id="plCode" type="password" autocomplete="current-password" placeholder="8 characters" required></label>
+    <p class="err" id="loginErr"></p>
+    <button type="submit" id="go">Open my dashboard</button>
+    <p class="hint">Your access code comes from Rik. Your data opens only with your own code.</p>
+    </div>
+  </form>
+
+  <main id="desk" class="app" hidden>
+    <header class="top abar">
+      <div class="idt"><img class="logo" src="logo.jpg" alt="OPPO Care+"><div class="who"><span class="brandline">OPPO Care+ Leader Desk</span><h1 id="plName"></h1><span id="plMeta"></span></div></div>
+      <div class="srow"><span class="stamp" id="stamp"></span><button class="rbtn" id="reload" type="button" aria-label="Refresh data" title="Refresh"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5"/></svg></button></div>
+      <select id="leadSel" aria-label="Leader" hidden></select>
+    </header>
+    <nav class="bnav" id="bnav" aria-label="Main">
+      <button type="button" data-pg="Home" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+      <button type="button" data-pg="Oec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>OECs</button>
+      <button type="button" data-pg="Team"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Team</button>
+      <button type="button" data-pg="Rew"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 21V7M12 7H8a2.5 2.5 0 1 1 0-5c3 0 4 5 4 5zM12 7h4a2.5 2.5 0 1 0 0-5c-3 0-4 5-4 5z"/></svg>Rewards<i class="dot" id="rewDot" hidden></i></button>
+      <button type="button" data-pg="More"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></svg>More</button>
+    </nav>
+    <div class="chips" id="perChips" role="group" aria-label="Period">
+      <button type="button" data-per="today" aria-pressed="true">Today</button><button type="button" data-per="yesterday" aria-pressed="false">Yesterday</button><button type="button" data-per="week" aria-pressed="false">This week</button><button type="button" data-per="month" aria-pressed="false">This month</button><button type="button" data-per="lastmonth" aria-pressed="false">Last month</button><button type="button" data-per="custom" aria-pressed="false">Dates…</button>
+    </div>
+    <select id="period" aria-label="Period" hidden><option value="today">Today</option><option value="yesterday">Yesterday</option><option value="week">This week</option><option value="month">This month</option><option value="lastmonth">Last month</option><option value="custom">Choose dates…</option></select>
+    <span class="range" id="rangeBox" hidden><input type="date" id="dFrom" aria-label="From date"><span>to</span><input type="date" id="dTo" aria-label="To date"></span>
+    <p class="fpill" id="fpill" hidden></p>
+
+    <div class="pg" id="pgHome">
+      <div class="zban" id="zban" role="alert" hidden></div>
+      <div class="cstrip" id="astrip" hidden></div>
+      <div class="cstrip" id="cstrip" hidden></div>
+      <p class="hnote" id="hnote" hidden></p>
+      <section class="kpis" id="kpis"></section>
+      <section class="panel"><h2 id="topTitle">OEC sales</h2><ol class="lb" id="topList"></ol><p class="more" id="topNote"></p></section>
+      <section class="panel trend mt"><h2 id="trendTitle">Daily sales</h2><div id="trend"></div><div class="tday" id="tday" aria-live="polite"></div><p class="more" id="trendNote"></p></section>
+      <section class="panel mt"><h2>Needs attention</h2><div class="alerts" id="alerts"></div></section>
+    </div>
+
+    <div class="pg" id="pgOec" hidden>
+      <section class="panel lrank"><div class="hd"><h2 id="tpTitle">Top performer OECs</h2><span class="seg" role="group" aria-label="Top performer period"><button type="button" data-tp="day" aria-pressed="false">Today</button><button type="button" data-tp="week" aria-pressed="true">Week</button><button type="button" data-tp="month" aria-pressed="false">Month</button></span></div><ol class="lb" id="tpList"></ol><p class="more" id="tpNote"></p></section>
+      <section class="panel mt"><h2 id="slTitle">OECs by units sold</h2><div class="slabs" id="slabs"></div><div class="slabbar" id="slabbar"></div><p class="more" id="slNote"></p><div class="tscroll" id="slLeadWrap" hidden><table id="slLead"></table></div></section>
+      <section class="panel mt" id="wrongP" hidden><h2 id="wrongTitle">Wrong / unknown promoter ID</h2><p class="more" id="wrongNote"></p><div class="tscroll"><table id="wrongT"></table></div><details id="wrongMoreD" hidden><summary id="wrongMoreS"></summary><div class="tscroll"><table id="wrongT2"></table></div></details></section>
+    </div>
+
+    <div class="pg" id="pgTeam" hidden>
+      <section class="panel lrank" id="lrank" hidden><div class="hd"><h2 id="lrTitle">Project leader ranking</h2><span class="seg" role="group" aria-label="Ranking period"><button type="button" data-lr="day" aria-pressed="true">Today</button><button type="button" data-lr="month" aria-pressed="false">Month</button></span></div>
+        <div class="myrank" id="myrank" hidden></div>
+        <div class="grid2"><div><h3 class="sub">Top 10 leaders</h3><ol class="lb" id="lrTop"></ol></div><div><h3 class="sub">Bottom 10 leaders</h3><ol class="lb" id="lrBot"></ol></div></div>
+        <p class="more" id="lrNote"></p></section>
+      <section class="panel mt"><h2 id="barsTitle">Sales by ASM</h2><div class="hbars" id="bars"></div></section>
+      <section class="panel mt"><h2 id="planTitle">Plan mix</h2><div class="planmix" id="planmix"></div></section>
+      <section class="panel mt"><h2>Team performance</h2><div class="tabs" id="tabs"></div><div class="tscroll"><table id="tbl"></table></div><p class="more" id="tblNote"></p></section>
+    </div>
+
+    <div class="pg" id="pgRew" hidden>
+      <nav class="views" role="tablist" aria-label="Rewards"><button type="button" role="tab" id="vSales" aria-selected="false" hidden>Sales</button><button type="button" role="tab" id="vCamp" aria-selected="true">Campaigns<span class="cnt" id="campCnt" hidden></span></button><button type="button" role="tab" id="vInc" aria-selected="false">Incentive</button><button type="button" role="tab" id="vPen" aria-selected="false" hidden>Penalty<span class="cnt" id="penCnt" hidden></span></button></nav>
+      <div id="salesView" hidden></div>
+      <div class="wnote" id="wnote" role="status" hidden></div>
+      <div id="campView"><div class="camps" id="camps"></div></div>
+      <div id="incView" hidden><div class="camps" id="inc"></div></div>
+      <div id="penView" hidden><div class="camps" id="pen"></div></div>
+    </div>
+
+    <div class="pg" id="pgMore" hidden>
+      <section class="panel menu">
+        <h2>Filter</h2>
+        <label for="planSel">Plan<select id="planSel" aria-label="Plan"><option value="">All plans</option></select></label>
+      </section>
+      <section class="panel menu mt">
+        <h2>Reports</h2>
+        <button id="xls" type="button">Download Excel</button>
+        <p class="more">An Excel file with every OEC, ASM, OSE, plan and top-seller list for the period you picked.</p>
+      </section>
+      <section class="panel menu mt">
+        <h2>Account</h2>
+        <p class="more" id="moreWho"></p>
+        <button class="ghost" id="logout" type="button">Sign out</button>
+      </section>
+    </div>
+
+  </main>
+</div>
+
+<button type="button" class="cfab" id="chatOpen" hidden aria-label="Open chat assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Ask</button>
+<section class="chat" id="chat" hidden aria-label="Chat assistant">
+  <div class="ch"><img src="logo.jpg" alt=""><div><b>Care+ Assistant</b><small id="chatMode">Answers from your dashboard data</small></div><button type="button" id="chatClose">Close</button></div>
+  <div class="msgs" id="chatMsgs" aria-live="polite"></div>
+  <div class="sugg" id="chatSugg"></div>
+  <form id="chatForm"><input id="chatIn" autocomplete="off" placeholder="Ask about your sales…" aria-label="Your question"><button type="submit">Send</button></form>
+</section>
+<script>
+(function(){
+  const $=id=>document.getElementById(id);
+  const fmt=n=>Math.round(n).toLocaleString("en-IN");
+  const inr=n=>"₹"+(n>=1e7?(n/1e7).toFixed(2)+" Cr":n>=1e5?(n/1e5).toFixed(2)+" L":Math.round(n).toLocaleString("en-IN"));
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  let D=null, cur=null, tab="ASM", q="";
+
+  let B=null;
+  const REM="ld-remember";
+  const remGet=()=>{try{const v=JSON.parse(localStorage.getItem(REM)||"null");return v&&v.id&&v.code?v:null}catch{return null}};
+  const remSet=v=>{try{v?localStorage.setItem(REM,JSON.stringify(v)):localStorage.removeItem(REM)}catch{}};
+  fetch("data.json?t="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(j=>{B=j;autoLogin()}).catch(()=>{$("loginErr").textContent="Sales data could not load. Refresh the page to try again."});
+  const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+  async function unlock(id,code){
+    const sl=B.slices[id]; if(!sl) return null;
+    const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(code),"PBKDF2",false,["deriveKey"]);
+    const key=await crypto.subtle.deriveKey({name:"PBKDF2",salt:b64(B.salt),iterations:B.iter,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["decrypt"]);
+    try{const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64(sl.iv)},key,b64(sl.ct));return JSON.parse(new TextDecoder().decode(pt))}catch{return null}
+  }
+
+  async function autoLogin(){
+    const r=remGet(); if(!r||cur) return;
+    $("loginErr").textContent="Signing you in…";
+    const j=await unlock(r.id,r.code);
+    if(!j){remSet(null);$("loginErr").textContent="Please sign in again.";return}   // code changed or removed
+    enter(r.id,r.code,j);
+  }
+  $("loginForm").addEventListener("submit",async e=>{
+    e.preventDefault(); if(!B){$("loginErr").textContent="Still loading sales data. Try again in a moment.";return}
+    const id=$("plId").value.trim().toUpperCase(), code=$("plCode").value.trim().toUpperCase().replace(/[^A-Z0-9]/g,"");
+    $("go").disabled=true; $("loginErr").textContent="Checking…";
+    const j=await unlock(id,code); $("go").disabled=false;
+    if(!j){$("loginErr").textContent="That Leader ID and access code don't match. Check both and try again.";return}
+    remSet({id,code}); enter(id,code,j);
+  });
+  function enter(id,code,j){
+    if(id!=="ALL"&&showPoster("Your dashboard opens on 28 Nov. See you then!")){$("go").disabled=false;$("loginErr").textContent="";$("plCode").value="";return}
+    curCode=code; load(j);
+    $("loginErr").textContent=""; $("plCode").value=""; cur=id; tab=id==="ALL"?"Leader":"ASM"; q="";
+    $("loginForm").hidden=true; $("desk").hidden=false;
+    { const ks=Object.keys(D.leaders), adm=cur==="ALL", grp=!adm&&ks.length>1; $("leadSel").hidden=!(grp||adm);
+      const byName=k=>[...k].sort((a,b)=>(a==="UNMAPPED")-(b==="UNMAPPED")||String(D.leaders[a]).localeCompare(D.leaders[b]));
+      $("leadSel").innerHTML=adm?`<option value="">All leaders (${ks.filter(k=>k!=="UNMAPPED").length})</option>`+byName(ks).map(k=>`<option value="${esc(k)}">${esc(D.leaders[k])}</option>`).join("")
+        :grp?`<option value="">All my leaders (${ks.length})</option>`+[cur,...ks.filter(k=>k!==cur)].map(k=>`<option value="${esc(k)}">${esc(D.leaders[k])}${k===cur?" (me)":""}</option>`).join(""):"";
+      if(grp) tab="Leader"; }
+    topAll=false; go("Home"); render();
+  }
+  let curCode=null;
+  const LAUNCH="2026-11-21"; // poster disappears automatically from this date (IST)
+  const preLaunch=()=>new Date(Date.now()+330*60000).toISOString().slice(0,10)<LAUNCH;
+  function showPoster(msg){
+    if(!preLaunch()) return false;
+    const days=Math.round((new Date(LAUNCH+"T00:00:00Z")-new Date(new Date(Date.now()+330*60000).toISOString().slice(0,10)+"T00:00:00Z"))/864e5);
+    $("posterCd").textContent=days===1?"Launching tomorrow":`${days} days to go`;
+    $("posterMsg").hidden=!msg; $("posterMsg").textContent=msg||"";
+    $("poster").hidden=false; $("loginForm").hidden=true; $("desk").hidden=true; return true;
+  }
+  $("posterSignin").onclick=()=>{$("poster").hidden=true;$("loginForm").hidden=false;$("plId").focus()};
+  showPoster();
+  function load(j){
+    D=j; D.campaigns=j.campaigns||[]; D.rows=j.rows.map(r=>({code:r[0],name:r[1],store:r[2],ose:r[3],lid:r[4],asm:r[5],area:r[6],month:r[7],target:r[8],today:r[9]||0,days:r[10]||[],zsm:r[11]||"—",x:r[0]==="NO-OEC"}));
+    const dl=(D.live&&D.live.dates)||[]; D.rows.forEach(r=>{r.ev=r.days.map(([i,p,n,pr])=>[dl[i],p,n,pr||0])});
+    const ps=$("planSel"), keep=ps.value; ps.innerHTML='<option value="">All plans</option>'+((D.live&&D.live.plans)||[]).map((p,i)=>`<option value="${i}">${esc(p)}</option>`).join(""); ps.value=keep;
+  }
+  async function refresh(){
+    if(!cur||!curCode) return; const btn=$("reload"); btn.disabled=true; btn.classList.add("spin"); btn.classList.remove("off");
+    try{ const r=await fetch("data.json?t="+Date.now(),{cache:"no-store"}); B=await r.json(); const j=await unlock(cur,curCode); if(j){load(j);render()} }
+    catch(e){ btn.classList.add("off"); btn.title="Offline, tap to try again"; }
+    btn.classList.remove("spin");
+    btn.disabled=false;
+  }
+  $("reload").addEventListener("click",refresh);
+  setInterval(refresh,5*60*1000);
+  // app version: when a newer page is published (GitHub Pages caches the page up to 10 min), load it within a minute
+  const APPV="2026-11-26-search1";
+  setInterval(async()=>{ if(!/github\.io$/.test(location.hostname)) return; try{ const r=await fetch("index.html?t="+Date.now(),{cache:"no-store"}); if(!r.ok) return; const t=await r.text(); const m=t.match(/const APPV="([^"]+)"/); if(m&&m[1]!==APPV) location.replace(location.pathname+"?v="+Date.now()) }catch(e){} },60*1000);
+  // check every minute for a newer data.json and reload only when it changed
+  setInterval(async()=>{ if(!cur||!curCode||!B) return; try{ const r=await fetch("data.json?t="+Date.now(),{cache:"no-store"}); const j=await r.json(); if(j.asof!==B.asof){ B=j; const k=await unlock(cur,curCode); if(k){load(k);render()} } }catch(e){} },60*1000);
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible") refresh()});
+  const istToday=()=>new Date(Date.now()+330*60000).toISOString().slice(0,10);
+  const addDays=(d,n)=>{const t=new Date(d+"T00:00:00Z");t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)};
+  // which rows this login sees: ALL = everyone; a main leader = own team + leaders under them (filterable)
+  function viewRows(){const adm=cur==="ALL", grp=!adm&&Object.keys(D.leaders).length>1, ls=(grp||adm)?$("leadSel").value:"";
+    const rows=ls?D.rows.filter(r=>r.lid===ls):(adm||grp)?D.rows:D.rows.filter(r=>r.lid===cur);
+    return {grp:grp||(adm&&!!ls),ls,rows,all:(adm||grp)&&!ls}}
+  $("leadSel").addEventListener("change",()=>render());
+  function range(per){
+    const t=istToday();
+    if(per==="today") return [t,t,"today"];
+    if(per==="yesterday"){const y=addDays(t,-1);return [y,y,"yesterday"]}
+    if(per==="week"){const wd=(new Date(t+"T00:00:00Z").getUTCDay()+6)%7;return [addDays(t,-wd),t,"this week"]}
+    if(per==="month") return [t.slice(0,8)+"01",t,"this month"];
+    if(per==="lastmonth"){const e=addDays(t.slice(0,8)+"01",-1);return [e.slice(0,8)+"01",e,"last month"]}
+    let a=$("dFrom").value||t, b=$("dTo").value||t; if(a>b)[a,b]=[b,a];
+    const f=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    return [a,b,a===b?"on "+f(a):`${f(a)} to ${f(b)}`];
+  }
+  $("period").addEventListener("change",()=>{const c=$("period").value==="custom";$("rangeBox").hidden=!c;
+    if(c&&!$("dFrom").value){const t=istToday();$("dFrom").value=addDays(t,-6);$("dTo").value=t}render()});
+  $("planSel").addEventListener("change",()=>render());
+  $("dFrom").addEventListener("change",()=>render()); $("dTo").addEventListener("change",()=>render());
+  $("logout").addEventListener("click",()=>{remSet(null);cur=null;D=null;curCode=null;$("desk").hidden=true;$("loginForm").hidden=false;$("plId").value="";showPoster()});
+  const tsum=rs=>rs.reduce((a,r)=>a+(r.tgt||0),0);
+  const achPill=p=>p>=100?"p-good":p>=75?"p-warn":"p-bad";
+
+  function group(rows,key){
+    const m=new Map();
+    rows.forEach(r=>{const k=r[key]; if(!m.has(k)) m.set(k,{key:k,rows:[]}); m.get(k).rows.push(r)});
+    return [...m.values()].map(g=>{
+      const real=g.rows.filter(r=>!r.x), sale=g.rows.reduce((a,r)=>a+r.sale,0), prem=g.rows.reduce((a,r)=>a+r.prem,0), active=real.filter(r=>r.sale>0).length;
+      return {...g,sale,prem,target:tsum(g.rows),oec:real.length,active,avg:sale/Math.max(1,real.length),
+        sub:{asm:new Set(g.rows.map(r=>r.asm)).size,ose:new Set(g.rows.map(r=>r.ose)).size,store:new Set(g.rows.map(r=>r.store)).size},
+        lid:g.rows[0].lid,area:g.rows[0].area,asm:g.rows[0].asm};
+    }).sort((a,b)=>b.sale-a.sale);
+  }
+  const activePill=p=>p>=85?"p-good":p>=70?"p-warn":"p-bad";
+
+  // Rik (22 Nov): leaders with zero sales today get a "Loser" alert; it disappears with the team's first sale
+  function zeroBanner(){
+    const z=$("zban"), dd=D.live&&D.live.date; if(!dd||dd!==istToday()){z.hidden=true;return}
+    if(cur==="ALL"){const L=D.lboard; if(!L||!L.leaders){z.hidden=true;return}
+      const zs=L.leaders.filter(l=>!l[2][l[2].length-1]).map(l=>l[1]).sort();
+      z.innerHTML=zs.length?`<b class="t">🐢 Today's Losers: ${zs.length} ${zs.length===1?"leader":"leaders"} on 0 sales</b><ol style="margin:4px 0 0 20px;padding:0">${zs.map(n=>`<li><b>${esc(n)}</b></li>`).join("")}</ol><small>Each name drops off this list by itself after that team's first sale today.</small>`:"";
+      z.hidden=!zs.length; return}
+    let n=0; D.rows.forEach(r=>{if(r.lid===cur) for(const e of r.ev) if(e[0]===dd) n+=e[2]});
+    z.innerHTML=`<b class="t">🐢 Loser of the day alert!</b>Your team has <b>0 Care+ sales today</b> while other teams are already selling. One sale is all it takes to drop this tag. Call your OECs now and get the first policy in!${D.penalty&&D.penalty.today>=D.penalty.start&&D.penalty.today<=D.penalty.end?` <b>If your team is still on 0 at midnight, a ₹${fmt(D.penalty.amount)} penalty is added for today.</b>`:""}<small>This message goes away by itself as soon as your team makes its first sale today.</small>`;
+    z.hidden=n>0;
+  }
+  // Rik (22 Nov): sales whose promoter ID is not in the Care Team mapping, with how each was placed, so leaders fix their promoters
+  function wrongIds(ls){
+    const W=((D.live&&D.live.wrong)||[]).filter(w=>ls?w.lid===ls:true), P=$("wrongP"), all=cur==="ALL";
+    P.hidden=!W.length; if(!W.length) return;
+    const ms=[...new Set(W.flatMap(w=>Object.keys(w.m)))].sort();
+    const mn=m=>new Date(m+"-01T00:00:00Z").toLocaleDateString("en-IN",{month:"short",timeZone:"UTC"});
+    const L=[...W].sort((a,b)=>all?((a.lid!=="UNMAPPED")-(b.lid!=="UNMAPPED"))||0:0);
+    const tot=W.reduce((a,w)=>a+Object.values(w.m).reduce((x,y)=>x+y,0),0), un=W.filter(w=>w.lid==="UNMAPPED").reduce((a,w)=>a+Object.values(w.m).reduce((x,y)=>x+y,0),0), td=W.reduce((a,w)=>a+w.today,0);
+    $("wrongTitle").textContent=`Wrong / unknown promoter ID (${fmt(tot)} sales)`;
+    $("wrongNote").innerHTML=`These sales came from a promoter ID that is <b>not in the Care Team mapping</b> (wrong or new ID), or from today's live sales where the portal shows no ID. They are still counted for the leader shown, using the clue under <i>How placed</i>. ${all?`<b>${fmt(un)}</b> sales have no clue at all and stay "Not mapped". `:""}Please correct the promoter ID with your OECs or get the promoter added to the mapping.${td?` Today: <b>${fmt(td)}</b>.`:""}`;
+    const hd=`<thead><tr><th>Promoter ID</th><th>Promoter</th><th>Store</th>${all?"<th>Leader</th>":""}<th>How placed</th>${ms.map(m=>`<th class="r">${mn(m)}</th>`).join("")}<th class="r">Today</th></tr></thead>`;
+    const tr=w=>`<tr><td>${esc(w.pid)}</td><td>${esc(w.name||"—")}</td><td>${esc(w.store||"—")}</td>${all?`<td>${esc(w.lid==="UNMAPPED"?"Not mapped":(D.leaders[w.lid]||w.lid))}</td>`:""}<td class="more">${esc(w.how)}</td>${ms.map(m=>`<td class="r num">${w.m[m]?fmt(w.m[m]):""}</td>`).join("")}<td class="r num">${w.today?fmt(w.today):""}</td></tr>`;
+    const N=25; $("wrongT").innerHTML=hd+`<tbody>${L.slice(0,N).map(tr).join("")}</tbody>`;
+    $("wrongMoreD").hidden=L.length<=N; if(L.length>N){$("wrongMoreS").textContent=`Show ${L.length-N} more`; $("wrongT2").innerHTML=hd+`<tbody>${L.slice(N).map(tr).join("")}</tbody>`}
+  }
+  function wNote(){ const w=D.withdrawn||[], el=$("wnote"); if(!el) return; if(!w.length){el.hidden=true;return} el.innerHTML=`📢 <b>Notice:</b> the following ${w.length>1?"campaigns have":"campaign has"} been <b>withdrawn</b> and no longer apply: ${w.map(x=>"<b>"+esc(x.name.split(":")[0])+"</b>"+(x.name.includes(":")?" ("+esc(x.name.split(":").slice(1).join(":").trim())+")":"")).join(" and ")}. No reward will be given under ${w.length>1?"these campaigns":"this campaign"}. Other campaigns continue as before.`; el.hidden=false }
+  function render(){
+    zeroBanner(); wNote();
+    document.querySelectorAll("#perChips [data-per]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.per===$("period").value));
+    { const ps=$("planSel"), fp=$("fpill"); fp.hidden=!ps.value; if(ps.value){fp.innerHTML=`<span>Showing only <b>${esc(ps.options[ps.selectedIndex].text)}</b></span><button type="button" class="ghost" id="fpClr">Show all plans</button>`; $("fpClr").onclick=()=>{ps.value="";render()}} }
+    $("moreWho").textContent=`Signed in as ${cur==="ALL"?"admin (all leaders)":(D.leaders[cur]||"")+" · "+cur}`;
+    const per=$("period").value, [rf,rt,pl]=range(per);
+    const psel=$("planSel").value, pf=psel===""?-1:+psel;
+    const len=Math.round((new Date(rt)-new Date(rf))/864e5)+1, qf=addDays(rf,-len), qt=addDays(rf,-1);
+    D.rows.forEach(r=>{let n=0,pr=0,pn=0,pp=0;r.pp={};for(const [d,p,c,m] of r.ev){ if(d>=rf&&d<=rt){ if(!r.pp[p])r.pp[p]=[0,0]; r.pp[p][0]+=c; r.pp[p][1]+=m; if(pf<0||p===pf){n+=c;pr+=m} } else if(d>=qf&&d<=qt&&(pf<0||p===pf)){pn+=c;pp+=m} } r.sale=n; r.prem=pr; r.psale=pn; r.pprem=pp});
+    // monthly targets, pro-rated to the chosen dates (a full month = 100%)
+    const dim=d=>new Date(Date.UTC(+d.slice(0,4),+d.slice(5,7),0)).getUTCDate(), TF=rf.slice(0,7)===rt.slice(0,7)?len/dim(rf):len/30;
+    D.rows.forEach(r=>{r.tgt=r.target==null?null:r.target*TF});
+    const dl=(D.live&&D.live.dates)||[], first=dl[0];
+    $("hnote").hidden=!(first&&rf<first);
+    if(first&&rf<first) $("hnote").textContent=`Portal history starts ${new Date(first+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"})}. Days before that aren't counted yet.`;
+    const {all,rows,grp,ls}=viewRows(), real=rows.filter(r=>!r.x);
+    wrongIds(ls);
+    const sale=rows.reduce((a,r)=>a+r.sale,0), active=real.filter(r=>r.sale>0).length;
+    const asms=new Set(rows.map(r=>r.asm).filter(x=>x!=="—")), oses=new Set(rows.map(r=>r.ose).filter(x=>x!=="—")), stores=new Set(rows.map(r=>r.store)), areas=new Set(rows.map(r=>r.area));
+    $("plName").textContent=cur==="ALL"&&!ls?"All project leaders":grp?(ls?D.leaders[ls]:`${D.leaders[cur]} & team`):D.leaders[cur];
+    $("plMeta").textContent=cur==="ALL"&&!ls?`${Object.keys(D.leaders).length} leaders · West Bengal`:grp&&!ls?`${cur} · ${Object.values(D.leaders).join(", ")}`:`${ls||cur} · ${[...areas].join(", ")}`;
+    const lv=D.live, t=lv&&lv.asof.length>10?new Date(lv.asof):null;
+    $("stamp").textContent=lv?`Live from pos.acko.com · updated ${t?t.toLocaleString("en-IN",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit",timeZone:"Asia/Kolkata"}):lv.asof}`:"No portal data yet";
+    const T=tsum(rows), ach=T?sale/T*100:null;
+
+    const ap=active/Math.max(1,real.length)*100, unc=rows.filter(r=>r.x).reduce((a,r)=>a+r.sale,0);
+    const prem=rows.reduce((a,r)=>a+r.prem,0), psale=rows.reduce((a,r)=>a+r.psale,0), pprem=rows.reduce((a,r)=>a+r.pprem,0);
+    const asp=sale?prem/sale:0, pasp=psale?pprem/psale:0, hasPrev=dl.length&&qf>=dl[0];
+    const dlt=(a,b)=>{if(!hasPrev||!b)return "";const p=(a-b)/b*100;return `<span class="${p>=0?"d-up":"d-dn"}">${p>=0?"▲":"▼"} ${Math.abs(p).toFixed(0)}%</span> vs previous ${len===1?"day":len+" days"} · `};
+    const prod=sale/Math.max(1,active);
+    $("kpis").innerHTML=[
+      [`Policies ${pl}`,fmt(sale),dlt(sale,psale)+(unc?`${fmt(unc)} not tied to one OEC`:`${fmt(sale/len)} a day on average`)],
+      [`Premium ${pl}`,inr(prem),dlt(prem,pprem)+`${inr(prem/len)} a day on average`],
+      ["ASP (avg selling price)",inr(asp),dlt(asp,pasp)+"Premium ÷ policies"],
+      [`Selling OECs`,`${fmt(active)}<small class="more"> / ${fmt(real.length)}</small>`,`<span class="pill ${activePill(ap)}">${Math.round(ap)}% active</span>`,ap],
+      ["Productivity",prod.toFixed(1),`Policies per selling OEC · ${(sale/Math.max(1,stores.size)).toFixed(1)} per store`],
+      D.hasTargets?["Achievement",Math.round(ach)+"%",`${fmt(sale)} of ${fmt(T)} target${TF<0.999||TF>1.001?" (monthly target pro-rated)":""} · <span class="pill ${achPill(ach)}">${ach>=100?"On target":ach>=75?"Close":"Behind"}</span>`,ach]:["Coverage",fmt(stores.size),`stores · ${oses.size} OSE · ${asms.size} ASM · Targets not loaded yet`]
+    ].map((k,i)=>`<div class="kpi${i===0?" big":""}"><span class="l">${k[0]}</span><span class="v num">${k[1]}</span>${k[3]!=null?`<div class="bar"><i style="width:${Math.min(100,k[3])}%"></i></div>`:""}<span class="s">${k[2]}</span></div>`).join("");
+
+    // trend: each day in range, or last 14 days when the range is short
+    const tf=len<7?addDays(rt,-13):rf, days=[]; for(let d=tf;d<=rt;d=addDays(d,1)) days.push(d);
+    const byDay=new Map(days.map(d=>[d,[0,0]])); rows.forEach(r=>{for(const [d,p,c,m] of r.ev){const v=byDay.get(d); if(v&&(pf<0||p===pf)){v[0]+=c;v[1]+=m}}});
+    const tv=days.map(d=>byDay.get(d)), tmax=Math.max(1,...tv.map(v=>v[0])), W=Math.max(300,$("trend").clientWidth||600),H=200,pb=22,pt_=14, bw=W/days.length;
+    const dfm=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    const every=Math.ceil(days.length/10);
+    $("trendTitle").textContent=len<7?"Daily sales, last 14 days":`Daily sales ${pl}`;
+    $("trend").innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Policies per day"><line x1="0" x2="${W}" y1="${H-pb}" y2="${H-pb}"/>`+tv.map((v,i)=>{const h=v[0]/tmax*(H-pb-pt_), x=i*bw+bw*.15;return `<rect class="b" data-i="${i}" x="${x}" y="${H-pb-h}" width="${bw*.7}" height="${Math.max(h,v[0]?1:0)}" rx="2"></rect><rect class="hit" data-i="${i}" x="${i*bw}" y="0" width="${bw}" height="${H-pb}"></rect>`+(i%every===0||i===days.length-1?`<text class="ax" x="${x+bw*.35}" y="${H-6}" text-anchor="middle">${dfm(days[i])}</text>`:"")}).join("")+`</svg>`;
+    const best=tv.reduce((b,v,i)=>v[0]>tv[b][0]?i:b,0);
+    $("trendNote").textContent=tv[best][0]?`Best day ${dfm(days[best])} with ${fmt(tv[best][0])} policies. Tap any bar to see that day.`:"No sales in these days.";
+    const pick=i=>{const v=tv[i]; $("trend").querySelectorAll("rect.b").forEach(r=>r.classList.toggle("on",+r.dataset.i===i));
+      $("tday").innerHTML=`<b>${dfm(days[i])}</b><span><b class="num">${fmt(v[0])}</b> policies</span><span><b class="num">${inr(v[1])}</b> premium</span><span>ASP <b class="num">${v[0]?inr(v[1]/v[0]):"—"}</b></span>`};
+    $("trend").querySelectorAll("rect[data-i]").forEach(r=>r.addEventListener("click",()=>pick(+r.dataset.i)));
+    let lastDay=tv.length-1; while(lastDay>0&&!tv[lastDay][0]) lastDay--; pick(lastDay);
+
+    // top OECs
+    const sellers=rows.filter(r=>r.sale>0).sort((a,b)=>b.sale-a.sale||b.prem-a.prem);
+    const nTop=topAll?sellers.length:Math.min(10,sellers.length);
+    const li=(r,i)=>`<li class="${r.x?"nx":""}"><span class="rk">${i+1}</span><span class="nm">${esc(r.name)}${r.x?'<span class="tag">not in OEC list</span>':""}<small>${esc(r.store)}${all?" · "+esc(D.leaders[r.lid]||""):""}</small></span><span class="num" style="text-align:right">${fmt(r.sale)}<small class="more" style="display:block">ASP ${inr(r.prem/r.sale)}</small></span></li>`;
+    $("topTitle").textContent=`OEC sales ${pl}`;
+    $("topList").innerHTML=sellers.length?sellers.slice(0,nTop).map(li).join("")+(sellers.length>nTop?`<li><span></span><span class="more">+ ${fmt(sellers.length-nTop)} more sellers with ${fmt(sellers.slice(nTop).reduce((a,r)=>a+r.sale,0))} policies</span><span></span></li>`:"")+`<li class="tot"><span></span><span class="nm">Total · ${fmt(sellers.length)} ${sellers.length===1?"seller":"sellers"}</span><span class="num" style="text-align:right">${fmt(sale)}</span></li>`:'<li><span></span><span class="more">No sales yet in this period.</span><span></span></li>';
+    const sb=$("topMore"); if(sb) sb.remove();
+    if(sellers.length>10) $("topList").insertAdjacentHTML("afterend",`<button type="button" class="showall" id="topMore">${topAll?"Show top 10 only":"Show all "+fmt(sellers.length)+" sellers"}</button>`);
+    if($("topMore")) $("topMore").onclick=()=>{topAll=!topAll;render()};
+    $("topNote").textContent=unc?`${fmt(unc)} ${unc===1?"policy":"policies"} came from a seller who is not in the OEC list (shown with a tag). They still count for your team.`:"";
+
+    topPerf(real,all,pf);
+    slabs(real,all);
+
+    // project leader ranking (daily + monthly), visible to every leader
+    leaderRank(all);
+
+    // bars
+    const bkey=all?"lid":"asm", bg=group(rows,bkey).slice(0,10), max=bg[0]?bg[0].sale:1;
+    $("barsTitle").textContent=all?"Top 10 leaders by sales":"Sales by ASM";
+    $("bars").innerHTML=bg.map(g=>`<div class="hb"><div><span>${esc(all?D.leaders[g.key]:g.key)} <span class="m">· ${g.oec} OECs</span></span><span class="num">${fmt(g.sale)}</span></div><div class="bar"><i style="width:${g.sale/max*100}%"></i></div></div>`).join("");
+
+    // alerts
+    const zero=real.length-active;
+    const og=group(rows,"ose").filter(g=>g.key!=="—"&&g.oec>=3).sort((a,b)=>a.active/a.oec-b.active/b.oec).slice(0,3);
+    const topO=[...real].sort((a,b)=>b.sale-a.sale)[0];
+    const noOse=real.filter(r=>r.ose==="—").length;
+    let h="";
+    if(zero) h+=`<div class="alert a-bad">${fmt(zero)} OECs have no sales ${pl}. See them under Team, Zero sale.</div>`;
+    og.forEach(g=>{if(g.active<g.oec)h+=`<div class="alert a-warn">OSE ${esc(g.key)}: only ${g.active} of ${g.oec} OECs selling</div>`});
+    if(noOse) h+=`<div class="alert a-warn">${noOse} OECs have no OSE or ASM mapped in the report</div>`;
+    if(unc) h+=`<div class="alert a-warn">${fmt(unc)} policies ${pl} came from sellers the mapping can't pin to one OEC. They're tagged in the OEC sales list on Home.</div>`;
+    if(topO&&topO.sale) h+=`<div class="alert a-good">Top OEC: ${esc(topO.name)} at ${esc(topO.store)} with ${fmt(topO.sale)} sales</div>`;
+    $("alerts").innerHTML=h;
+
+    // plan mix
+    const plans=(D.live&&D.live.plans)||[], pt=plans.map((p,i)=>{let n=0,m=0,o=0;rows.forEach(r=>{const v=r.pp[i];if(v){n+=v[0];m+=v[1];if(!r.x&&v[0])o++}});return {i,p,n,m,o}}).filter(x=>x.n).sort((a,b)=>b.n-a.n);
+    const pn=pt.reduce((a,x)=>a+x.n,0)||1;
+    $("planTitle").textContent=`Plan mix ${pl}`;
+    $("planmix").innerHTML=pt.length?pt.map(x=>`<button type="button" class="pm" data-p="${x.i}" aria-pressed="${pf===x.i}"><span>${esc(x.p)}</span><b class="num">${fmt(x.n)}</b><div class="bar"><i style="width:${x.n/pn*100}%"></i></div><span class="m">${Math.round(x.n/pn*100)}% of policies · ${inr(x.m)} · ${x.o} OECs</span></button>`).join(""):'<p class="more">No sales in this period.</p>';
+    $("planmix").querySelectorAll(".pm").forEach(b=>b.onclick=()=>{const v=b.dataset.p;$("planSel").value=($("planSel").value===v?"":v);render()});
+
+    // tabs
+    const tabs=(all?["Leader"]:[]).concat(["ZSM","ASM","OSE","OEC","Area","Plan","Zero sale"]);
+    if(!tabs.includes(tab)) tab="ASM";
+    const sf=document.activeElement&&document.activeElement.id==="search", sp=sf?document.activeElement.selectionStart:null;
+    $("tabs").innerHTML=tabs.map(t=>`<button type="button" data-t="${t}" aria-pressed="${t===tab}">${t}${t==="Zero sale"?"":" wise"}</button>`).join("")+
+      `<input id="search" type="search" placeholder="Search name, store or code" aria-label="Search" value="${esc(q)}">`;
+    $("tabs").querySelectorAll("button").forEach(b=>b.onclick=()=>{tab=b.dataset.t;render()});
+    window.__rw=window.__rw||innerWidth;
+    window.onresize=()=>{clearTimeout(window.__rz);window.__rz=setTimeout(()=>{if(innerWidth===window.__rw)return;window.__rw=innerWidth;if(D&&cur)render()},250)};
+    $("search").oninput=e=>{q=e.target.value;table(rows,all)};
+    if(sf){const el=$("search");el.focus();try{el.setSelectionRange(sp,sp)}catch(e){}}
+    table(rows,all);
+    campaigns(rows,all); incentive(all); penalty(all);
+    $("rewDot").hidden=$("campCnt").hidden&&$("penCnt").hidden;
+    LAST={rows,all,pl,rf,rt,pf,len};
+  }
+
+  let LAST=null, XL=null, topAll=false;
+  const loadXL=()=>XL||(XL=new Promise((ok,no)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js";sc.onload=()=>ok(window.ExcelJS);sc.onerror=()=>{XL=null;no(new Error("load"))};document.head.appendChild(sc)}));
+  async function exportXL(){
+    if(!LAST) return; const btn=$("xls"), lbl="Download Excel"; btn.disabled=true; btn.textContent="Preparing…";
+    const done=t=>{btn.textContent=t;btn.disabled=false;if(t!==lbl)setTimeout(()=>btn.textContent=lbl,4000)};
+    try{
+      const EJ=await loadXL(), {rows,all,pl,rf,rt,pf,len}=LAST, real=rows.filter(r=>!r.x), plans=(D.live&&D.live.plans)||[];
+      const V=viewRows(), adm=cur==="ALL", nm=V.ls?D.leaders[V.ls]:adm?"All project leaders":V.grp?D.leaders[cur]+" & team":D.leaders[cur];
+      const planName=pf<0?"All plans":plans[pf], tg=D.hasTargets, end=(D.live&&D.live.date)||istToday();
+      const R=v=>Math.round(v), dshow=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
+      const evSum=(rs,a,b)=>{let n=0,m=0;for(const r of rs)for(const [d,p,c,v] of r.ev) if(d>=a&&d<=b&&(pf<0||p===pf)){n+=c;m+=v} return [n,m]};
+      const sale=rows.reduce((x,r)=>x+r.sale,0), prem=rows.reduce((x,r)=>x+r.prem,0), active=real.filter(r=>r.sale>0).length, T=tg?tsum(rows):0;
+      const pe=addDays(rf,-1), ps=addDays(pe,-(len-1)), hasPrev=ps>=((D.live&&D.live.dates&&D.live.dates[0])||"9999"), [psale,pprem]=hasPrev?evSum(rows,ps,pe):[null,null];
+      const mo=end.slice(0,8)+"01", wk=addDays(end,-((new Date(end+"T00:00:00Z").getUTCDay()+6)%7));
+      const unitsM=r=>{let n=0;for(const [d,p,c] of r.ev) if(d>=mo&&d<=end) n+=c; return n};
+      const wb=new EJ.Workbook(); wb.creator="OPPO Care+ Leader Desk"; wb.created=new Date();
+      const G1="FF0A4F2C",G2="FF03190D",GOLD="FFE9C25A",SOFT="FFDCF1E4",ZEB="FFF5F9F6",LINE="FFD6E2DA";
+      const F={n:'#,##0',m:'"₹"#,##0',d:'#,##0.0',p:'0%',dt:'dd-mmm-yyyy'};
+      const head=(ws,title,sub)=>{ws.mergeCells(1,1,1,8);const c=ws.getCell(1,1);c.value=title;c.font={bold:true,size:16,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:G2}};c.alignment={vertical:"middle"};ws.getRow(1).height=30;
+        ws.mergeCells(2,1,2,8);const s2=ws.getCell(2,1);s2.value=sub;s2.font={italic:true,color:{argb:"FF55695E"}};for(let i=1;i<=8;i++){ws.getCell(1,i).fill=c.fill;ws.getCell(1,i).border={bottom:{style:"medium",color:{argb:GOLD}}}}};
+      const subT=`${nm} · ${dshow(rf)} to ${dshow(rt)} (${pl}) · ${planName} · data as of ${D.live?D.live.asof.replace("T"," ").slice(0,16):""}`;
+      // table writer: cols=[[header,width,fmt]], data rows, optional totals row
+      const table=(ws,r0,cols,data,opt={})=>{const hr=ws.getRow(r0);cols.forEach(([h,w,f],i)=>{const c=hr.getCell(i+1);c.value=h;c.font={bold:true,color:{argb:"FFFFFFFF"}};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:G1}};c.alignment={vertical:"middle",wrapText:true,horizontal:f?"right":"left"};c.border={bottom:{style:"thin",color:{argb:GOLD}}};if(w&&!opt.keepW)ws.getColumn(i+1).width=Math.max(ws.getColumn(i+1).width||0,w)});hr.height=22;
+        data.forEach((row,k)=>{const xr=ws.getRow(r0+1+k);row.forEach((v,i)=>{const c=xr.getCell(i+1);c.value=v===""||v==null?null:v;const f=cols[i][2];if(f)c.numFmt=F[f];if(k%2)c.fill={type:"pattern",pattern:"solid",fgColor:{argb:ZEB}};c.border={bottom:{style:"hair",color:{argb:LINE}}}})});
+        let last=r0+data.length;
+        if(opt.total){const xr=ws.getRow(last+1);opt.total.forEach((v,i)=>{const c=xr.getCell(i+1);c.value=v===""?null:v;const f=cols[i][2];if(f)c.numFmt=F[f];c.font={bold:true};c.fill={type:"pattern",pattern:"solid",fgColor:{argb:SOFT}};c.border={top:{style:"thin",color:{argb:G1}}}});last++}
+        if(opt.filter&&data.length) ws.autoFilter={from:{row:r0,column:1},to:{row:r0+data.length,column:cols.length}};
+        return last};
+      const sheet=(name,title,cols,data,opt={})=>{const ws=wb.addWorksheet(name,{views:[{state:"frozen",ySplit:4,xSplit:opt.xs||0}],properties:{tabColor:{argb:opt.tab||G1}}});head(ws,title,subT);table(ws,4,cols,data,{filter:true,...opt});return ws};
+      const pct=(a,b)=>b?a/b:null;
+
+      // 1. Summary
+      const ws=wb.addWorksheet("Summary",{properties:{tabColor:{argb:GOLD}},views:[{showGridLines:false}]});
+      head(ws,"OPPO Care+ · Leader Desk report",subT); ws.getColumn(1).width=34; ws.getColumn(2).width=18; ws.getColumn(3).width=18; ws.getColumn(4).width=4; ws.getColumn(5).width=26; ws.getColumn(6).width=40; ws.getColumn(7).width=14; ws.getColumn(8).width=12;
+      let r=table(ws,4,[["Key figures · "+pl,34],["This period",18,"n"],["Previous period",18,"n"]],[
+        ["Policies",sale,psale],["Premium (₹)",R(prem),pprem==null?null:R(pprem)],["ASP (₹)",sale?R(prem/sale):null,psale?R(pprem/psale):null],["OECs",real.length,null],["Selling OECs",active,null],["Policies per selling OEC",active?+(sale/active).toFixed(2):0,null],
+        ...(tg?[["Target (pro-rated)",R(T),null]]:[])],{keepW:true});
+      ws.getCell(6,2).numFmt=F.m;ws.getCell(6,3).numFmt=F.m;ws.getCell(7,2).numFmt=F.m;ws.getCell(7,3).numFmt=F.m;ws.getCell(10,2).numFmt=F.d;
+      r+=1; r=table(ws,r+1,[["Rates",34],["Value",18,"p"]],[["Active OECs %",pct(active,real.length)],...(tg?[["Achievement % (vs pro-rated target)",pct(sale,T)]]:[]),["Change in policies vs previous period",psale?(sale-psale)/psale:null]],{keepW:true});
+      // rank + campaign
+      const L=D.lboard; const side=[];
+      if(L&&L.me) side.push(["Your rank today",`#${L.rankDay[0]} of ${L.rankDay[1]}`],["Your rank this month",`#${L.rankMonth[0]} of ${L.rankMonth[1]}`]);
+      const c=(D.campaigns||[]).find(c=>c.daily_target), B=c&&D.board&&D.board[c.id];
+      if(c){side.push(["Campaign",c.name],["Campaign dates",`${dshow(c.start)} to ${dshow(c.end)}`],["Daily target",`${c.daily_target} policies`]);
+        if(B&&B.private){const i=B.days.indexOf(end);if(i>=0)side.push(["Your team today",`${B.me[i]} of ${c.daily_target} · rank ${B.ranks[i]} of ${B.n}`]);side.push(["Buds won by your team",String(B.days.filter((d,k)=>B.me[k]>=c.daily_target).length)])}
+        else if(B&&B.leaders){side.push(["Buds won by all leaders",String(B.days.reduce((a,d,k)=>a+B.leaders.filter(l=>l[2][k]>=c.daily_target).length,0))])}}
+      // units sold slabs (month)
+      const SLB=[["Sold 5 or more",x=>x>=5],["Sold 4",x=>x===4],["Sold 3",x=>x===3],["Sold 2",x=>x===2],["Sold 1",x=>x===1],["No sale",x=>!x]];
+      const um=real.map(unitsM);
+      r+=1; r=table(ws,r+1,[["OECs by units sold · month to date",34],["OECs",18,"n"],["Share",18,"p"]],SLB.map(([l,f])=>{const n=um.filter(f).length;return [l,n,pct(n,real.length)]}),{keepW:true,total:["Total",real.length,1]});
+      r+=1; ws.getCell(r+1,1).value="Base target is 5 units per OEC per month. Sheets: Top performers, leader / ZSM / ASM / OSE / Area wise, OEC wise, Plan wise, Daily, Zero sale, Campaign.";ws.getCell(r+1,1).font={italic:true,color:{argb:"FF55695E"}};
+
+      // 2. Top performers
+      const topOf=(a,b)=>real.map(r=>{let n=0,m=0;for(const [d,p,c,v] of r.ev) if(d>=a&&d<=b&&(pf<0||p===pf)){n+=c;m+=v} return [r,n,m]}).filter(x=>x[1]).sort((x,y)=>y[1]-x[1]||y[2]-x[2]).slice(0,10);
+      const tws=wb.addWorksheet("Top performers",{properties:{tabColor:{argb:GOLD}},views:[{showGridLines:false}]}); head(tws,"Top performer OECs",subT);
+      const tcols=[["#",5,"n"],["OEC",24],["Store",30],...(all?[["Leader",20]]:[]),["Policies",10,"n"],["Premium",12,"m"],["ASP",10,"m"]];
+      let tr=4; for(const [lab,a,b] of [["This week ("+dshow(wk)+" to "+dshow(end)+")",wk,end],["This month ("+dshow(mo)+" to "+dshow(end)+")",mo,end],["Selected period · "+pl,rf,rt]]){
+        tws.getCell(tr,1).value=lab; tws.getCell(tr,1).font={bold:true,size:12,color:{argb:G1}}; tr=table(tws,tr+1,tcols,topOf(a,b).map(([o,n,m],i)=>[i+1,o.name,o.store,...(all?[D.leaders[o.lid]||""]:[]),n,R(m),R(m/n)]))+2}
+
+      // 3. group sheets
+      const gcols=lab=>[[lab,28],["OECs",8,"n"],["Selling OECs",10,"n"],["Active %",9,"p"],["Stores",8,"n"],["Policies",10,"n"],["Premium",13,"m"],["ASP",10,"m"],["Per OEC",9,"d"],...(tg?[["Target",10,"n"],["Ach %",9,"p"]]:[]),["5+ units (month)",11,"n"]];
+      const grpSheet=(key,name,lab)=>{const gs=group(rows,key); const g5=k=>real.filter(r=>r[key]===k&&unitsM(r)>=5).length;
+        const data=gs.map(g=>[lab?lab(g.key):g.key,g.oec,g.active,pct(g.active,g.oec),g.sub.store,g.sale,R(g.prem),g.sale?R(g.prem/g.sale):null,+g.avg.toFixed(2),...(tg?[g.target?R(g.target):null,pct(g.sale,g.target)]:[]),g5(g.key)]);
+        const tot=["Total",real.length,active,pct(active,real.length),"",sale,R(prem),sale?R(prem/sale):null,active?+(sale/real.length).toFixed(2):0,...(tg?[R(T),pct(sale,T)]:[]),um.filter(x=>x>=5).length];
+        sheet(name,name.replace(" wise"," wise summary"),gcols(name.replace(" wise","")),data,{total:tot,xs:1})};
+      if(all) grpSheet("lid","Leader wise",k=>D.leaders[k]||k);
+      grpSheet("zsm","ZSM wise"); grpSheet("asm","ASM wise"); grpSheet("ose","OSE wise"); grpSheet("area","Area wise");
+
+      // 4. OEC wise
+      const slab=n=>n>=5?"5+":String(n);
+      sheet("OEC wise","OEC wise detail",[["OEC",24],["EMP code",13],["Store",30],["OSE",18],["ASM",18],["ZSM",18],["Area",16],...(all?[["Leader",20]]:[]),["Policies",10,"n"],["Premium",12,"m"],["ASP",10,"m"],...(tg?[["Target",9,"d"],["Ach %",8,"p"]]:[]),["Month units",10,"n"],["Month slab",9]],
+        [...rows].sort((a,b)=>b.sale-a.sale||a.name.localeCompare(b.name)).map(r=>{const u=r.x?null:unitsM(r);return [r.name,r.code,r.store,r.ose,r.asm,r.zsm,r.area,...(all?[D.leaders[r.lid]||r.lid]:[]),r.sale,R(r.prem),r.sale?R(r.prem/r.sale):null,...(tg?[r.tgt==null?null:+r.tgt.toFixed(1),r.tgt?r.sale/r.tgt:null]:[]),u,u==null?"":slab(u)]}),{xs:1});
+      // 5. plan
+      const pt=plans.map((p,i)=>{let n=0,m=0,o=0;rows.forEach(r=>{const v=r.pp[i];if(v){n+=v[0];m+=v[1];if(!r.x&&v[0])o++}});return [p,n,R(m),n?R(m/n):null,o,null]}).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]); pt.forEach(x=>x[5]=pct(x[1],sale));
+      sheet("Plan wise","Plan wise",[["Plan",38],["Policies",10,"n"],["Premium",13,"m"],["ASP",10,"m"],["OECs selling",12,"n"],["Share",8,"p"]],pt,{total:["Total",sale,R(prem),sale?R(prem/sale):null,active,1]});
+      // 6. daily
+      const dd=new Map(); for(let d=rf;d<=rt;d=addDays(d,1)) dd.set(d,[0,0]);
+      rows.forEach(r=>{for(const [d,p,c,m] of r.ev){const v=dd.get(d); if(v&&(pf<0||p===pf)){v[0]+=c;v[1]+=m}}});
+      const dws=sheet("Daily","Daily trend",[["Date",14],["Day",8],["Policies",10,"n"],["Premium",13,"m"],["ASP",10,"m"]],[...dd].map(([d,v])=>[new Date(d+"T00:00:00Z"),new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{weekday:"short",timeZone:"UTC"}),v[0],R(v[1]),v[0]?R(v[1]/v[0]):null]),{total:["Total","",sale,R(prem),sale?R(prem/sale):null]});
+      dws.getColumn(1).numFmt=F.dt;
+      // 7. zero sale
+      sheet("Zero sale","OECs with no sale · "+pl,[["OEC",24],["EMP code",13],["Store",30],["OSE",18],["ASM",18],["ZSM",18],...(all?[["Leader",20]]:[]),["Month units",10,"n"]],real.filter(r=>!r.sale).sort((a,b)=>a.asm.localeCompare(b.asm)||a.name.localeCompare(b.name)).map(r=>[r.name,r.code,r.store,r.ose,r.asm,r.zsm,...(all?[D.leaders[r.lid]||r.lid]:[]),unitsM(r)]),{tab:"FFC0392B"});
+      // 8. campaign
+      if(c&&B){const dl=B.days.map(d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"}));
+        if(B.private){sheet("Campaign",c.name,[["Day",12],["Your team",11,"n"],["Target",9,"n"],["Rank",8,"n"],["Leaders",9,"n"],["Won?",8],["Winners that day",40]],B.days.map((d,k)=>[dl[k],d>end?null:B.me[k],c.daily_target,d>end?null:B.ranks[k],B.n,d>end?"":B.me[k]>=c.daily_target?"🏆 Yes":"No",(B.winnerNames&&B.winnerNames[k]||[]).join(", ")]),{tab:GOLD})}
+        else if(B.leaders){sheet("Campaign",c.name+" · daily board",[["Leader",24],...dl.map(x=>[x,8,"n"]),["Total",9,"n"],["Buds won",9,"n"]],B.leaders.map(l=>[l[1],...l[2],l[2].reduce((a,b)=>a+b,0),l[2].filter(v=>v>=c.daily_target).length]).sort((a,b)=>b[b.length-2]-a[a.length-2]),{tab:GOLD,xs:1})}}
+      // rank/campaign block on Summary in E:F
+      if(side.length){const s0=4; const hdr=ws.getRow(s0); ["Rank & campaign",""].forEach((h,i)=>{const cc=hdr.getCell(5+i);cc.value=h||null;cc.font={bold:true,color:{argb:"FFFFFFFF"}};cc.fill={type:"pattern",pattern:"solid",fgColor:{argb:G1}};cc.border={bottom:{style:"thin",color:{argb:GOLD}}}});
+        side.forEach((row,k)=>{row.forEach((v,i)=>{const cc=ws.getRow(s0+1+k).getCell(5+i);cc.value=v;cc.alignment={wrapText:true,vertical:"top"};if(k%2)cc.fill={type:"pattern",pattern:"solid",fgColor:{argb:ZEB}};cc.border={bottom:{style:"hair",color:{argb:LINE}}}})});}
+      const buf=await wb.xlsx.writeBuffer();
+      const fn=`OPPO-CarePlus_${(all?"All":cur)}_${rf}_to_${rt}${pf<0?"":"_"+planName.replace(/[^A-Za-z0-9]+/g,"-")}.xlsx`;
+      if(window.LeaderDeskApp&&LeaderDeskApp.saveBase64){ // inside the Android app
+        const u=new Uint8Array(buf); let bin=""; for(let i=0;i<u.length;i+=32768) bin+=String.fromCharCode.apply(null,u.subarray(i,i+32768));
+        const r=LeaderDeskApp.saveBase64(fn,btoa(bin)); return done(r==="saved"?"Saved to Downloads":r==="permission"?"Allow storage, then tap again":"Couldn't save");
+      }
+      const dl=window.claude&&await claude.use("downloads").catch(()=>null);
+      if(dl){ try{await dl.save({filename:fn,data:new Blob([buf])});return done("Saved")}catch(e){ if(e&&e.code==="declined") return done(lbl); if(e&&e.code==="rate_limited") return done("Try again in a moment"); } }
+      const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})); a.download=fn; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),60000);
+      done("Downloaded");
+    }catch(e){ done("Couldn't create the file") }
+  }
+  $("xls").addEventListener("click",exportXL);
+
+  let view="camp";
+  // bottom tab bar
+  function go(p,keep){document.querySelectorAll(".pg").forEach(e=>e.hidden=e.id!=="pg"+p);document.querySelectorAll("#bnav [data-pg]").forEach(b=>b.dataset.pg===p?b.setAttribute("aria-current","page"):b.removeAttribute("aria-current")); if(p==="Rew"&&!keep) setView(view); window.scrollTo(0,0)}
+  document.querySelectorAll("#bnav [data-pg]").forEach(b=>b.onclick=()=>go(b.dataset.pg));
+  // period chips drive the (hidden) period select
+  document.querySelectorAll("#perChips [data-per]").forEach(b=>b.onclick=()=>{$("period").value=b.dataset.per;$("period").dispatchEvent(new Event("change"))});
+  function setView(v){if(v==="sales"){go("Home");return} go("Rew",true); view=v;$("vSales").setAttribute("aria-selected",v==="sales");$("vCamp").setAttribute("aria-selected",v==="camp");$("vInc").setAttribute("aria-selected",v==="inc");$("salesView").hidden=v!=="sales";$("campView").hidden=v!=="camp";$("incView").hidden=v!=="inc";$("penView").hidden=v!=="pen";$("vPen").setAttribute("aria-selected",v==="pen")}
+  $("vSales").onclick=()=>setView("sales"); $("vCamp").onclick=()=>setView("camp"); $("vInc").onclick=()=>setView("inc"); $("vPen").onclick=()=>setView("pen");
+
+  // Rik (22 Nov): from 22 to 30 Nov a leader whose team ends a day on 0 sales pays a fixed penalty for that day
+  function penalty(all){
+    const P=D.penalty, el=$("pen"); $("vPen").hidden=!P; if(!P){el.innerHTML="";return}
+    const rs=x=>"₹"+fmt(x), dl=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    const inWin=P.today>=P.start&&P.today<=P.end&&P.today===istToday()&&!!D.live&&D.live.date===P.today; // only judge "today" on fresh data for today
+    const A=Object.entries(P.leaders).map(([l,L])=>({l,L,amt:L.zero.length*P.amount,risk:inWin&&!L.today}));
+    const rule=`<p class="more"><b>Rule:</b> from ${dl(P.start)} to ${dl(P.end)}, if a project leader's team ends the day with <b>0 Care+ sales</b>, a penalty of <b>${rs(P.amount)}</b> is charged for that day. A day is counted after it ends at midnight. ${P.days.length?`Days counted so far: ${P.days.map(dl).join(", ")}.`:"No day has finished yet."}</p>`;
+    const cnt=all?A.filter(a=>a.amt).length:A.filter(a=>a.l===cur&&(a.amt||a.risk)).length;
+    $("penCnt").textContent=cnt; $("penCnt").hidden=!cnt;
+    if(!all){
+      el.innerHTML=A.sort((a,b)=>(a.l!==cur)-(b.l!==cur)).map(a=>`<article class="camp"><header><div><h2>${esc(a.L.name)}${a.l===cur?" (you)":""} · Zero-sale penalty</h2><span class="meta">${dl(P.start)} to ${dl(P.end)}</span></div></header>
+        <div class="stats"><div><b class="num">${rs(a.amt)}</b><span>Penalty so far</span></div><div><b class="num">${fmt(a.L.zero.length)}</b><span>Zero-sale ${a.L.zero.length===1?"day":"days"}</span></div>${inWin?`<div><b class="num">${fmt(a.L.today||0)}</b><span>Sales today</span></div>`:""}</div>
+        ${a.risk?`<div class="alert a-bad">Your team is on <b>0 sales today</b>. If it stays at 0 until midnight, <b>${rs(P.amount)}</b> is added for ${dl(P.today)}.</div>`:inWin?`<div class="alert a-good">Safe today: your team has sold, so there is no penalty for ${dl(P.today)}.</div>`:""}
+        ${a.L.zero.length?`<div class="tscroll"><table><thead><tr><th>Day</th><th class="r">Sales</th><th class="r">Penalty</th></tr></thead><tbody>${a.L.zero.map(d=>`<tr><td>${dl(d)}</td><td class="r num">0</td><td class="r num">${rs(P.amount)}</td></tr>`).join("")}<tr><td><b>Total</b></td><td></td><td class="r num"><b>${rs(a.amt)}</b></td></tr></tbody></table></div>`:`<p>No penalty so far. Keep at least one sale every day.</p>`}
+        ${rule}</article>`).join(""); return}
+    A.sort((a,b)=>b.amt-a.amt||b.risk-a.risk||a.L.name.localeCompare(b.L.name));
+    const G=A.reduce((s,a)=>s+a.amt,0), R=A.filter(a=>a.risk);
+    el.innerHTML=`<article class="camp"><header><div><h2>Zero-sale penalty · ${cur==="ALL"?"all leaders":"your leaders"}</h2><span class="meta">${dl(P.start)} to ${dl(P.end)} · ${A.length} leaders (vacant teams excluded)</span></div></header>
+      <div class="stats"><div><b class="num">${rs(G)}</b><span>Total penalty so far</span></div><div><b class="num">${fmt(A.filter(a=>a.amt).length)}</b><span>Leaders with a penalty</span></div>${P.days.map(d=>{const n=A.filter(a=>a.L.zero.includes(d)).length;return `<div><b class="num">${rs(n*P.amount)}</b><span>${dl(d)} · ${n} ${n===1?"leader":"leaders"}</span></div>`}).join("")}${inWin?`<div><b class="num">${fmt(R.length)}</b><span>At risk today (on 0)</span></div>`:""}</div>
+      <div class="tscroll"><table><thead><tr><th>#</th><th>Leader</th><th>ID</th><th>Zero-sale days</th>${inWin?'<th class="r">Sales today</th>':""}<th class="r">Penalty</th></tr></thead><tbody>${A.map((a,i)=>`<tr><td class="num">${i+1}</td><td>${esc(a.L.name)}</td><td class="hint">${esc(a.l)}</td><td>${a.L.zero.length?a.L.zero.map(dl).join(", "):"—"}</td>${inWin?`<td class="r num">${a.risk?'<span class="pill p-bad">0 · at risk</span>':fmt(a.L.today)}</td>`:""}<td class="r num">${a.amt?`<b>${rs(a.amt)}</b>`:"—"}</td></tr>`).join("")}
+      <tr><td></td><td><b>Total</b></td><td></td><td></td>${inWin?"<td></td>":""}<td class="r num"><b>${rs(G)}</b></td></tr></tbody></table></div>${rule}</article>`;
+  }
+  // Project Leader Care+ incentive (scheme WB/SCH/26-27/09/Care+ 1, Sep-Nov 2026)
+  function incentive(all){
+    const ELIG=false; // Rik (22 Nov): show amounts only until he shares the overall target
+    const I=D.incentive, el=$("inc"); $("vInc").hidden=!I; if(!I){el.innerHTML="";return}
+    const mn=m=>new Date(m+"-01T00:00:00Z").toLocaleDateString("en-IN",{month:"short",year:"numeric",timeZone:"UTC"});
+    const cm=(D.live&&D.live.date||istToday()).slice(0,7);
+    const rs=x=>"₹"+fmt(x);
+    const note=`<p class="more"><b>Note:</b> Incentive is paid only if the project leader achieves <b>100% of the Care+ target</b>. Amounts below are what you have earned on sales so far. Sales from 13 Oct to 21 Oct count at half rate (50%).</p>`;
+    const rates=`<p class="more">Rates: 1 Yr Screen/Total damage ₹100 · 1 Yr Extended Warranty ₹70 · 6 Month Screen damage ₹50 · 6 Month Extended Warranty ₹30 per unit.</p>`;
+    const row=(L)=>I.months.map(m=>{const x=L.m[m]||{n:0,amt:0,plans:{},half:0}, T=L.target, pc=T?x.n/T*100:null, ok=pc!=null&&pc>=100;
+      return {m,x,T,pc,ok,st:ok?"✅ Eligible":m===cm?"In progress":"Not eligible"}});
+    const ks=Object.keys(I.leaders);
+    if(!all){
+      const cards=ks.sort((a,b)=>(a!==cur)-(b!==cur)).map(l=>{const L=I.leaders[l], R=row(L), tot=R.reduce((a,r)=>a+r.x.amt,0), pay=R.reduce((a,r)=>a+(r.ok?r.x.amt:0),0);
+        return `<article class="camp"><header><div><h2>${esc(L.name)}${l===cur?" (you)":""} · Care+ incentive</h2><span class="meta">Scheme 1 Sep to 30 Nov 2026</span></div></header>
+        <div class="stats"><div><b class="num">${rs(tot)}</b><span>Earned so far (Sep to Nov)</span></div>${R.map(r=>`<div><b class="num">${rs(r.x.amt)}</b><span>${mn(r.m)}</span></div>`).join("")}${ELIG?`<div><b class="num">${rs(pay)}</b><span>In months with 100% achieved</span></div>`:""}</div>
+        <div class="tscroll"><table><thead><tr><th>Month</th><th class="r">Care+ units</th>${ELIG?'<th class="r">Achievement</th>':""}<th class="r">Incentive earned</th>${ELIG?"<th>Status</th>":""}</tr></thead><tbody>${R.map(r=>`<tr><td>${mn(r.m)}${r.x.half?` <small class="more">(${fmt(r.x.half)} at half rate)</small>`:""}</td><td class="r num">${fmt(r.x.n)}</td>${ELIG?`<td class="r num">${r.pc==null?"—":Math.round(r.pc)+"%"}</td>`:""}<td class="r num"><b>${rs(r.x.amt)}</b></td>${ELIG?`<td>${r.st}${!r.ok&&r.T&&r.m===cm?` · ${fmt(Math.max(0,r.T-r.x.n))} to go`:""}</td>`:""}</tr>`).join("")}</tbody></table></div>
+        <details><summary>Plan wise</summary><div class="tscroll"><table><thead><tr><th>Month</th><th>Plan</th><th class="r">Units</th><th class="r">Incentive</th></tr></thead><tbody>${R.flatMap(r=>Object.entries(r.x.plans).map(([p,[n,a]])=>`<tr><td>${mn(r.m)}</td><td>${esc(p)}</td><td class="r num">${fmt(n)}</td><td class="r num">${rs(a)}</td></tr>`)).join("")}</tbody></table></div></details>
+        ${note}${rates}</article>`}).join("");
+      el.innerHTML=cards; return}
+    const A=ks.map(l=>{const L=I.leaders[l],R=row(L);return {l,L,R,tot:R.reduce((a,r)=>a+r.x.amt,0),pay:R.reduce((a,r)=>a+(r.ok?r.x.amt:0),0)}}).sort((a,b)=>b.tot-a.tot);
+    const mt=I.months.map(m=>[A.reduce((s,a)=>s+((a.L.m[m]||{}).amt||0),0),A.reduce((s,a)=>s+a.R.filter(r=>r.m===m&&r.ok).reduce((q,r)=>q+r.x.amt,0),0)]);
+    const G=A.reduce((s,a)=>s+a.tot,0), P=A.reduce((s,a)=>s+a.pay,0);
+    el.innerHTML=`<article class="camp"><header><div><h2>Project Leader Care+ incentive · ${cur==="ALL"?"all leaders":"your leaders"}</h2><span class="meta">Scheme 1 Sep to 30 Nov 2026 · ${A.length} leaders</span></div></header>
+      <div class="stats"><div><b class="num">${rs(G)}</b><span>Earned by all leaders so far</span></div>${ELIG?`<div><b class="num">${rs(P)}</b><span>Payable (months with 100%+)</span></div>`:""}${I.months.map((m,i)=>`<div><b class="num">${rs(mt[i][0])}</b><span>${mn(m)} earned${ELIG?" · "+rs(mt[i][1])+" payable":""}</span></div>`).join("")}</div>
+      <div class="tscroll"><table><thead><tr><th>#</th><th>Leader</th>${I.months.map(m=>`<th class="r">${mn(m)}</th>`).join("")}<th class="r">Total earned</th>${ELIG?'<th class="r">Payable</th>':""}</tr></thead><tbody>${A.map((a,i)=>`<tr><td class="num">${i+1}</td><td>${esc(a.L.name)}</td>${a.R.map(r=>`<td class="r num">${rs(r.x.amt)}<br><small>${fmt(r.x.n)} units${ELIG?` · ${r.pc==null?"—":Math.round(r.pc)+"%"} ${r.ok?"✅":""}`:""}</small></td>`).join("")}<td class="r num"><b>${rs(a.tot)}</b></td>${ELIG?`<td class="r num">${rs(a.pay)}</td>`:""}</tr>`).join("")}
+      <tr><td></td><td><b>Total</b></td>${mt.map(t=>`<td class="r num"><b>${rs(t[0])}</b></td>`).join("")}<td class="r num"><b>${rs(G)}</b></td>${ELIG?`<td class="r num"><b>${rs(P)}</b></td>`:""}</tr></tbody></table></div>${note}${rates}</article>`;
+  }
+
+  function campaigns(rows,all){
+    const t=istToday(), plans=(D.live&&D.live.plans)||[];
+    const dfm=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",year:"numeric",timeZone:"UTC"});
+    const list=D.campaigns.filter(c=>all||!c.leaders||!c.leaders.length||c.leaders.includes(cur)).map(c=>{
+      const st=t<c.start?"Upcoming":t>c.end?"Ended":"Live";
+      const ps=new Set((c.plans||[]).map(n=>plans.indexOf(n)).filter(i=>i>=0)), anyPlan=!(c.plans&&c.plans.length);
+      const scope=all&&c.leaders&&c.leaders.length?rows.filter(r=>c.leaders.includes(r.lid)):rows;
+      let n=0,m=0; const per=[];
+      scope.forEach(r=>{let a=0,b=0;for(const [d,p,k,v] of r.ev) if(d>=c.start&&d<=c.end&&(anyPlan||ps.has(p))){a+=k;b+=v} n+=a;m+=b; if(a&&!r.x) per.push([r,a,b])});
+      per.sort((x,y)=>y[1]-x[1]);
+      const tot=Math.round((new Date(c.end)-new Date(c.start))/864e5)+1, gone=st==="Upcoming"?0:st==="Ended"?tot:Math.round((new Date(t)-new Date(c.start))/864e5)+1;
+      return {c,st,n,m,per,tot,gone,left:tot-gone};
+    }).sort((a,b)=>({Live:0,Upcoming:1,Ended:2}[a.st]-{Live:0,Upcoming:1,Ended:2}[b.st])||(b.c.start>a.c.start?1:-1));
+    const live=list.filter(x=>x.st==="Live").length;
+    $("campCnt").hidden=!live; $("campCnt").textContent=live+" live";
+    if(!list.length){$("camps").innerHTML=`<div class="empty"><h2>No campaigns running right now</h2><p>When a sales campaign starts, its rules, dates and live leaderboard show up here for the whole team.</p></div>`;return}
+    $("camps").innerHTML=list.map(x=>x.c.area_target?areaCard(x,all,dfm):x.c.race?raceCard(x,all,dfm):x.c.daily_target?dailyCard(x,all,dfm):'').join('')+list.filter(x=>!x.c.daily_target&&!x.c.race&&!x.c.area_target).map(x=>{const c=x.c, pc=c.target?x.n/c.target*100:null, pace=c.target&&x.gone?x.n/x.gone*x.tot:null;
+      return `<article class="camp"><header><div><h2>${esc(c.name)}</h2><span class="meta">${dfm(c.start)} to ${dfm(c.end)} · ${c.plans&&c.plans.length?esc(c.plans.join(", ")):"All plans"}</span></div><span class="pill ${x.st==="Live"?"p-good":x.st==="Upcoming"?"p-warn":"p-bad"}">${x.st}${x.st==="Live"?` · ${x.left} ${x.left===1?"day":"days"} left`:""}</span></header>
+      ${c.details?`<p>${esc(c.details)}</p>`:""}${c.reward?`<p><b>Reward:</b> ${esc(c.reward)}</p>`:""}
+      <div class="stats"><div><b class="num">${fmt(x.n)}</b><span>Policies in campaign</span></div><div><b class="num">${inr(x.m)}</b><span>Premium</span></div><div><b class="num">${x.n?inr(x.m/x.n):"—"}</b><span>ASP</span></div><div><b class="num">${c.target?Math.round(pc)+"%":fmt(x.per.length)}</b><span>${c.target?`of ${fmt(c.target)} target`:"OECs selling"}</span></div></div>
+      ${c.target?`<div class="bar"><i style="width:${Math.min(100,pc)}%"></i></div><span class="more">${x.st==="Live"&&pace!=null?`At this pace the team ends near ${fmt(pace)} (${Math.round(pace/c.target*100)}% of target).`:""}</span>`:""}
+      ${x.per.length?`<div><h2 style="font-size:14px;margin-bottom:6px">Campaign leaderboard</h2><ol class="lb">${x.per.slice(0,10).map(([r,a,b],i)=>`<li><span class="rk">${i+1}</span><span class="nm">${esc(r.name)}<small>${esc(r.store)}</small></span><span class="num">${fmt(a)} · ${inr(b)}</span></li>`).join("")}</ol></div>`:x.st!=="Upcoming"?'<p class="more">No campaign sales yet.</p>':""}
+      </article>`}).join("");
+    $("camps").querySelectorAll(".daychips button").forEach(b=>b.addEventListener("click",()=>{campDay[b.dataset.c]=b.dataset.d;campaigns(rows,all)}));
+    // compact strip on the Sales tab for a live daily campaign
+    const lv=list.find(x=>x.c.daily_target&&x.st==="Live"&&D.board&&D.board[x.c.id]);
+    if(lv&&D.board[lv.c.id].private){const c=lv.c,B=D.board[c.id],i=B.days.indexOf(dayOf(c,B));
+      $("cstrip").innerHTML=`<span><b>${esc(c.name.split(":")[0])}</b> today: your team <b class="num">${fmt(B.me[i])}</b> of ${fmt(c.daily_target)} · rank <b>${B.ranks[i]}</b> of ${B.n}</span><button type="button" id="cstripGo">See campaign</button>`;
+      $("cstrip").hidden=false; $("cstripGo").onclick=()=>setView("camp");
+    } else if(lv){const c=lv.c,B=D.board[c.id],i=B.days.indexOf(dayOf(c,B)),me=B.leaders.find(l=>l[0]===cur);
+      const rk=[...B.leaders].sort((a,b)=>b[2][i]-a[2][i]), won=B.leaders.filter(l=>l[2][i]>=c.daily_target).length;
+      $("cstrip").innerHTML=`<span><b>${esc(c.name.split(":")[0])}</b> today: ${me?`your team <b class="num">${fmt(me[2][i])}</b> of ${fmt(c.daily_target)} · rank <b>${rk.findIndex(l=>l[0]===cur)+1}</b> of ${rk.length}`:`${won} ${won===1?"leader has":"leaders have"} hit ${fmt(c.daily_target)} · top: ${esc(rk[0][1])} ${fmt(rk[0][2][i])}`}</span><button type="button" id="cstripGo">See ranking</button>`;
+      $("cstrip").hidden=false; $("cstripGo").onclick=()=>setView("camp");
+    } else $("cstrip").hidden=true;
+    const av=list.find(x=>x.c.area_target&&x.st==="Live"&&D.board&&D.board[x.c.id]);
+    if(av){const c=av.c,B=D.board[c.id],S=areaStat(c,B),inr_=S.filter(a=>a.st!=="out");
+      $("astrip").innerHTML=`<span>📢 <b>Double Incentive</b>: ${fmt(c.area_target)} units per area every day till ${new Date(c.end+"T00:00:00Z").toLocaleDateString("en-IN",{weekday:"short",day:"numeric",month:"short",timeZone:"UTC"})}. ${S.length?(all?`${inr_.length} of ${S.length} areas still in the race`:S.map(a=>`${esc(a.a)} <b class="num">${fmt(a.today)}</b>/${fmt(c.area_target)} today ${a.st==="out"?"❌ out":a.today>=c.area_target?"✅":""}`).join(" · ")):""}</span><button type="button" id="astripGo">See areas</button>`;
+      $("astrip").hidden=false; $("astripGo").onclick=()=>setView("camp");
+    } else $("astrip").hidden=true;
+  }
+  // area campaign: each area must reach area_target units on every day of the window
+  function areaStat(c,B){const T=c.area_target, dd=(D.live&&D.live.date)||istToday();
+    return B.areas.map(([a,v,l])=>{const past=B.days.map((d,k)=>d<dd?(v[k]>=T?1:-1):d===dd?(v[k]>=T?1:0):null);
+      const ti=B.days.indexOf(dd), miss=past.filter(x=>x===-1).length, hits=past.filter(x=>x===1).length;
+      const st=miss?"out":hits===B.days.length?"qualified":"in";
+      return {a,v,l,past,today:ti>=0?v[ti]:0,miss,hits,st,tot:v.reduce((p,q)=>p+q,0)}})
+      .sort((x,y)=>({qualified:0,in:1,out:2}[x.st]-{qualified:0,in:1,out:2}[y.st])||y.today-x.today||y.tot-x.tot)}
+  function areaCard(x,all,dfm){
+    const c=x.c, T=c.area_target, B=D.board&&D.board[c.id];
+    const head=`<header><div><h2>📢 ${esc(c.name)}</h2><span class="meta">${dfm(c.start)} to ${dfm(c.end)} · ${fmt(T)} units per area every day · reward on ${dfm(c.reward_day||c.end)}</span></div><span class="pill ${x.st==="Live"?"p-good":x.st==="Upcoming"?"p-warn":"p-bad"}">${x.st}${x.st==="Live"?` · ${x.left} ${x.left===1?"day":"days"} left`:""}</span></header>`;
+    const intro=`${c.details?`<p>${esc(c.details)}</p>`:""}${c.reward?`<p><b>Reward:</b> ${esc(c.reward)}</p>`:""}`;
+    if(!B) return `<article class="camp">${head}${intro}<p class="more">Area counts appear here once sales data is loaded.</p></article>`;
+    const S=areaStat(c,B), sd=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    const wd=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{weekday:"short",timeZone:"UTC"}), dd=(D.live&&D.live.date)||istToday();
+    if(!S.length) return `<article class="camp">${head}${intro}<p class="more">No area is linked to your team yet.</p></article>`;
+    const ti=B.days.indexOf(dd);
+    const stats=`<div class="stats"><div><b class="num">${fmt(S.filter(a=>a.st!=="out").length)}</b><span>${all?"Areas":"Your areas"} still in the race</span></div><div><b class="num">${fmt(S.filter(a=>a.st==="out").length)}</b><span>Out (missed a day)</span></div><div><b class="num">${ti>=0?fmt(S.filter(a=>a.today>=T).length):"—"}</b><span>Hit ${fmt(T)} today</span></div><div><b class="num">${fmt(S.reduce((p,a)=>p+a.tot,0))}</b><span>Units in campaign</span></div></div>`;
+    const cell=(a,k)=>{const d=B.days[k],n=a.v[k],p=a.past[k];return p===null?`<td class="num more">—</td>`:`<td class="num" style="white-space:nowrap">${p===1?"✅ ":p===-1?"❌ ":""}${fmt(n)}${d===dd&&p===0?`<small class="more"> / ${fmt(T)}</small>`:""}</td>`};
+    const tag=a=>a.st==="qualified"?'<span class="pill p-good">🎉 Qualified</span>':a.st==="out"?'<span class="pill p-bad">Out</span>':`<span class="pill p-warn">In race${ti>=0&&a.today<T?` · ${fmt(T-a.today)} to go today`:""}</span>`;
+    const table=`<div style="overflow-x:auto"><table class="tbl"><thead><tr><th>Area</th>${B.days.map(d=>`<th class="num">${sd(d)}<br><small class="more">${d===dd?"Today":wd(d)}</small></th>`).join("")}<th class="num">Total</th><th>Status</th></tr></thead><tbody>${S.map(a=>`<tr><td><b>${esc(a.a)}</b>${all?`<br><small class="more">${a.l.map(l=>esc(D.leaders[l]||l)).join(", ")}</small>`:""}</td>${B.days.map((d,k)=>cell(a,k)).join("")}<td class="num"><b>${fmt(a.tot)}</b></td><td>${tag(a)}</td></tr>`).join("")}</tbody></table></div>`;
+    return `<article class="camp">${head}${intro}${stats}<div><h2 style="font-size:14px;margin-bottom:6px">Area-wise units per day</h2>${table}<p class="more" style="margin-top:6px">✅ hit ${fmt(T)} · ❌ missed (area is out) · area = the OEC's area in the team list.</p></div></article>`;
+  }
+  // OEC count by units sold in the period (base target is 5 units per OEC)
+  const SL=[["5+",r=>r._mu>=5,"s5","var(--good)"],["4",r=>r._mu===4,"","#5fb98f"],["3",r=>r._mu===3,"","#9fd3b8"],["2",r=>r._mu===2,"","var(--warn)"],["1",r=>r._mu===1,"","#e0a95a"],["0",r=>!r._mu,"s0","var(--bad)"]];
+  function slabs(real,all){
+    // always the current month to date, all plans (the base target is 5 units per OEC per month)
+    const end=(D.live&&D.live.date)||istToday(), mo=end.slice(0,7);
+    real.forEach(r=>{let n=0; for(const [d,p,c] of r.ev) if(d.slice(0,7)===mo&&d<=end) n+=c; r._mu=n});
+    const N=real.length||1, c=SL.map(([l,f])=>real.filter(f).length);
+    const mname=new Date(end+"T00:00:00Z").toLocaleDateString("en-IN",{month:"long",timeZone:"UTC"});
+    $("slTitle").textContent=`OECs by units sold · ${mname} so far`;
+    $("slabs").innerHTML=SL.map(([l,,cl],i)=>`<div class="slab ${cl}"><b class="num">${fmt(c[i])}</b><span>${l==="5+"?"sold 5 or more":l==="0"?"no sale":`sold ${l} unit${l==="1"?"":"s"}`}</span><span>${Math.round(c[i]/N*100)}%</span></div>`).join("");
+    $("slabbar").innerHTML=SL.map(([l,,,col],i)=>c[i]?`<i style="width:${c[i]/N*100}%;background:${col}" title="${l}: ${c[i]}"></i>`:"").join("");
+    $("slNote").textContent=`${fmt(real.length)} OECs. Base target is 5 units per OEC: ${fmt(c[0])} (${Math.round(c[0]/N*100)}%) have reached it this month. Counts all plans, 1 to ${new Date(end+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"})}.`;
+    $("slLeadWrap").hidden=!all;
+    if(all){const g={}; real.forEach(r=>(g[r.lid]=g[r.lid]||[]).push(r));
+      const rowsL=Object.entries(g).map(([lid,rs])=>[D.leaders[lid]||lid,rs.length,SL.map(([,f])=>rs.filter(f).length)]).sort((a,b)=>b[2][0]/b[1]-a[2][0]/a[1]);
+      $("slLead").innerHTML=`<thead><tr><th>Leader</th><th class="r">OECs</th>${SL.map(([l])=>`<th class="r">${l}</th>`).join("")}<th class="r">5+ %</th></tr></thead><tbody>${rowsL.map(([n,t,v])=>`<tr><td>${esc(n)}</td><td class="r num">${fmt(t)}</td>${v.map(x=>`<td class="r num">${fmt(x)}</td>`).join("")}<td class="r num">${Math.round(v[0]/t*100)}%</td></tr>`).join("")}</tbody>`}
+  }
+  let tpMode="week";
+  function topPerf(real,all,pf){
+    const end=(D.live&&D.live.date)||istToday(), wd=(new Date(end+"T00:00:00Z").getUTCDay()+6)%7;
+    const from=tpMode==="day"?end:tpMode==="week"?addDays(end,-wd):end.slice(0,8)+"01";
+    const sd=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    const L=viewRows().rows.map(r=>{let n=0,m=0;for(const [d,p,c,v] of r.ev) if(d>=from&&d<=end&&(pf<0||p===pf)){n+=c;m+=v} return [r,n,m]}).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]||b[2]-a[2]).slice(0,10);
+    document.querySelectorAll("[data-tp]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tp===tpMode));
+    $("tpTitle").textContent=`Top performer OECs · ${tpMode==="day"?"today":tpMode==="week"?"this week":"this month"}`;
+    $("tpList").innerHTML=L.length?L.map(([r,n,m],i)=>`<li><span class="rk">${i<3?["🥇","🥈","🥉"][i]:i+1}</span><span class="nm">${esc(r.name)}${r.x?'<span class="tag">not in OEC list</span>':""}<small>${esc(r.store)}${all?" · "+esc(D.leaders[r.lid]||""):""}</small></span><span class="num" style="text-align:right">${fmt(n)}<small class="more" style="display:block">ASP ${inr(m/n)}</small></span></li>`).join(""):'<li><span></span><span class="more">No sales yet in this period.</span><span></span></li>';
+    $("tpNote").textContent=`${from===end?sd(end):sd(from)+" to "+sd(end)}. Ranked by policies sold.`;
+  }
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-tp]"); if(b&&D){tpMode=b.dataset.tp; render()}});
+  let lrMode="day";
+  function leaderRank(all){
+    const L=D.lboard; if(!L||!(L.me||(L.leaders&&L.leaders.length))){$("lrank").hidden=true;return}
+    $("lrank").hidden=false;
+    const priv=!!L.me; $("lrank").querySelector(".seg").hidden=priv; $("lrank").querySelector(".grid2").hidden=priv;
+    if(priv){const m=L.me, d=L.days.length-1, dd=L.days[d], sd2=x=>new Date(x+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+      const mon2=new Date(dd+"T00:00:00Z").toLocaleDateString("en-IN",{month:"long",timeZone:"UTC"}), mt=m[2].reduce((a,b)=>a+b,0);
+      const dim=new Date(Date.UTC(+dd.slice(0,4),+dd.slice(5,7),0)).getUTCDate(), a=m[3]?mt/(m[3]*L.days.length/dim)*100:null;
+      $("lrTitle").textContent="Your rank among project leaders";
+      $("myrank").innerHTML=`<div><span class="more">Today (${sd2(dd)})</span><span><b>#${L.rankDay[0]}</b> of ${L.rankDay[1]}</span><span class="more">${fmt(m[2][d])} policies</span></div><div><span class="more">${mon2}</span><span><b>#${L.rankMonth[0]}</b> of ${L.rankMonth[1]}</span><span class="more">${fmt(mt)} policies${a!=null?` · ${Math.round(a)}% of target`:""}</span></div>`;
+      $("myrank").hidden=false; $("lrNote").textContent="Ranked by policies sold by your whole team, among all project leaders."; return}
+    const di=L.days.length-1, day=L.days[di];
+    const sd=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    const mon=new Date(day+"T00:00:00Z").toLocaleDateString("en-IN",{month:"long",timeZone:"UTC"});
+    const val=(l,m)=>m==="day"?l[2][di]:l[2].reduce((a,b)=>a+b,0);
+    const rank=m=>[...L.leaders].sort((a,b)=>val(b,m)-val(a,m)||a[1].localeCompare(b[1]));
+    const ach=l=>{if(!l[3]) return null; const dim=new Date(Date.UTC(+day.slice(0,4),+day.slice(5,7),0)).getUTCDate(); return val(l,"month")/(l[3]*L.days.length/dim)*100};
+    const R=rank(lrMode), n=R.length, me=L.leaders.find(l=>l[0]===cur);
+    $("lrTitle").textContent=`Project leader ranking · ${lrMode==="day"?sd(day):mon}`;
+    document.querySelectorAll("[data-lr]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.lr===lrMode));
+    if(me){const rd=rank("day").indexOf(me)+1, rm=rank("month").indexOf(me)+1, a=ach(me);
+      $("myrank").innerHTML=`<div><span class="more">Your rank today (${sd(day)})</span><span><b>#${rd}</b> of ${n}</span><span class="more">${fmt(val(me,"day"))} policies</span></div><div><span class="more">Your rank in ${mon}</span><span><b>#${rm}</b> of ${n}</span><span class="more">${fmt(val(me,"month"))} policies${a!=null?` · ${Math.round(a)}% of target`:""}</span></div>`;
+      $("myrank").hidden=false} else $("myrank").hidden=true;
+    const li=(l,k)=>{const a=ach(l);return `<li class="${l===me?"me":""}"><span class="rk">${k+1}</span><span class="nm">${esc(l[1])}${l===me?" (you)":""}${lrMode==="month"&&a!=null?`<small>${Math.round(a)}% of target</small>`:""}</span><span class="num">${fmt(val(l,lrMode))}</span></li>`};
+    $("lrTop").innerHTML=R.slice(0,10).map(li).join("");
+    const bot=R.map((l,k)=>[l,k]).slice(-10).reverse();
+    $("lrBot").innerHTML=bot.map(([l,k])=>li(l,k)).join("");
+    $("lrNote").textContent=`Ranked by policies sold by each leader's whole team${lrMode==="day"?" today":" this month"}. Bottom list starts from the lowest. All ${n} leaders are ranked.`;
+  }
+  document.addEventListener("click",e=>{const b=e.target.closest("[data-lr]"); if(b&&D){lrMode=b.dataset.lr; leaderRank(cur==="ALL")}});
+  const campDay={};
+  function dayOf(c,B){const t=istToday(), dd=(D.live&&D.live.date)||t; if(campDay[c.id]&&B.days.includes(campDay[c.id])) return campDay[c.id];
+    const want=t<c.start?c.start:t>c.end?c.end:(dd>=c.start&&dd<=c.end?dd:c.start); return B.days.includes(want)?want:B.days[0]}
+  function raceCard(x,all,dfm){
+    const c=x.c, Q=c.qualify, B=D.board&&D.board[c.id];
+    const head=`<header><div><h2>${esc(c.name)}</h2><span class="meta">${dfm(c.start)} to ${dfm(c.end)} · 1 year plans · ${fmt(Q)} units to qualify · one winner</span></div><span class="pill ${x.st==="Live"?"p-good":x.st==="Upcoming"?"p-warn":"p-bad"}">${x.st}${x.st==="Live"?` · ${x.left} ${x.left===1?"day":"days"} left`:""}</span></header>`;
+    const intro=`${c.details?`<p>${esc(c.details)}</p>`:""}${c.reward?`<p><b>Prize:</b> ${esc(c.reward)}</p>`:""}`;
+    if(!B) return `<article class="camp">${head}${intro}<p class="more">The ranking appears here once sales data is loaded.</p></article>`;
+    const ended=x.st==="Ended", lead=ended?"Winner":"Leading now";
+    const you=(n,v,r,tot)=>`<div class="you"><span class="more">Your team, 1 year plans since ${dfm(c.start)}</span><span><b class="big num">${fmt(n)}</b> / ${fmt(Q)} · rank <b>${r}</b> of ${tot} leaders</span><div class="bar"><i style="width:${Math.min(100,n/Q*100)}%"></i></div><span>${n>=Q?(r===1?(ended?"🏆 You are the winner!":"🏆 Qualified and in 1st place. Keep going to stay on top."):"✅ Qualified. Only the leader in 1st place wins, so keep selling."):`${fmt(Q-n)} more 1 year plans to qualify.`}</span><span class="more">Premium value: <b>${inr(v)}</b> (used to break a tie)</span></div>`;
+    if(B.private){const [n,v]=B.me;
+      return `<article class="camp">${head}${intro}${you(n,v,B.rank,B.n)}<div class="stats"><div><b class="num">${fmt(n)}</b><span>Your 1 year plans</span></div><div><b class="num">${inr(v)}</b><span>Your premium value</span></div><div><b class="num">${fmt(B.qualified)}</b><span>Leaders qualified (${fmt(Q)}+)</span></div><div><b class="num">${B.rank}</b><span>Your rank of ${B.n}</span></div></div><p>${B.leaderName?`<b>${lead}:</b> ${esc(B.leaderName)}${B.leaderName===D.leaders[cur]?" (you)":""}`:`No leader has reached ${fmt(Q)} yet.`}</p></article>`}
+    const L=B.leaders, me=L.find(l=>l[0]===cur), q=L.filter(l=>l[2]>=Q), tot=L.reduce((a,l)=>a+l[2],0);
+    const list=`<ol class="rank">${L.map((l,k)=>{const w=l[2]>=Q,top=k===0&&w;return `<li class="${top?"win ":""}${l[0]===cur?"me":""}"><span class="rk">${k+1}</span><span class="who"><b>${esc(l[1])}${l[0]===cur?" (you)":""}</b><span class="bar"><i style="width:${Math.min(100,l[2]/Q*100)}%"></i></span></span><span class="n num">${top?"🏆 ":w?"✅ ":""}${fmt(l[2])}<small>${inr(l[3])}${w?"":` · ${fmt(Q-l[2])} to go`}</small></span></li>`}).join("")}</ol>`;
+    return `<article class="camp">${head}${intro}${me?you(me[2],me[3],L.indexOf(me)+1,L.length):""}<div class="stats"><div><b class="num">${fmt(tot)}</b><span>1 year plans, all leaders</span></div><div><b class="num">${fmt(q.length)}</b><span>Leaders qualified</span></div><div><b class="num">${q.length?esc(q[0][1]):"—"}</b><span>${lead}</span></div><div><b class="num">${q.length?fmt(q[0][2]):"—"}</b><span>Their units</span></div></div><div><h2 style="font-size:14px;margin-bottom:6px">Leader ranking (units, then value)</h2>${list}</div></article>`;
+  }
+  function dailyCard(x,all,dfm){
+    const c=x.c, T=c.daily_target, B=D.board&&D.board[c.id];
+    const head=`<header><div><h2>${esc(c.name)}</h2><span class="meta">${dfm(c.start)} to ${dfm(c.end)} · ${c.plans&&c.plans.length?esc(c.plans.join(", ")):"All Care+ plans"} · ${fmt(T)} policies in a day wins</span></div><span class="pill ${x.st==="Live"?"p-good":x.st==="Upcoming"?"p-warn":"p-bad"}">${x.st}${x.st==="Live"?` · ${x.left} ${x.left===1?"day":"days"} left`:x.st==="Upcoming"?` · starts ${dfm(c.start)}`:""}</span></header>`;
+    const poster=c.poster?`<details${x.st==="Upcoming"?" open":""}><summary>Campaign poster</summary><img class="poster" src="${esc(c.poster)}" alt="${esc(c.name)} poster" loading="lazy"></details>`:"";
+    const intro=`${c.details?`<p>${esc(c.details)}</p>`:""}${c.reward?`<p><b>Prize:</b> ${esc(c.reward)}</p>`:""}`;
+    if(!B) return `<article class="camp">${head}${intro}${poster}<p class="more">The daily ranking appears here once sales data is loaded.</p></article>`;
+    const sel=dayOf(c,B), i=B.days.indexOf(sel), t=istToday(), dd=(D.live&&D.live.date)||t;
+    const future=d=>d>dd, wins=d=>(B.leaders||[]).filter(l=>l[2][B.days.indexOf(d)]>=T);
+    const sd=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{day:"numeric",month:"short",timeZone:"UTC"});
+    const wd=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-IN",{weekday:"short",timeZone:"UTC"});
+    const chips=`<div class="daychips" role="group" aria-label="Campaign day">${B.days.map(d=>{const w=wins(d).length;return `<button type="button" data-c="${esc(c.id)}" data-d="${d}" aria-pressed="${d===sel}" class="${w?"won":""}">${sd(d)}<small>${future(d)?wd(d):w?`🏆 ${w}`:d===dd?"Today":wd(d)}</small></button>`}).join("")}</div>`;
+    if(B.private){const n=B.me[i], r=B.ranks[i], myWins=B.days.filter((d,k)=>B.me[k]>=T), best=Math.max(...B.me);
+      const chipsP=`<div class="daychips" role="group" aria-label="Campaign day">${B.days.map((d,k)=>`<button type="button" data-c="${esc(c.id)}" data-d="${d}" aria-pressed="${d===sel}" class="${B.me[k]>=T?"won":""}">${sd(d)}<small>${future(d)?wd(d):B.me[k]>=T?"🏆 You won":B.winners[k]?`🏆 ${B.winners[k]}`:d===dd?"Today":wd(d)}</small></button>`).join("")}</div>`;
+      const msg=future(sel)?"This day hasn't started yet.":n>=T?`🏆 Target hit! Your team wins 1 Buds 3 Pro+ for ${sd(sel)}.`:sel===dd&&x.st==="Live"?`${fmt(T-n)} more policies today to win a Buds 3 Pro+.`:`${fmt(T-n)} short of ${fmt(T)} on ${sd(sel)}.`;
+      const youP=`<div class="you"><span class="more">Your team on ${sd(sel)}</span><span><b class="big num">${fmt(n)}</b> / ${fmt(T)}${future(sel)?"":` · rank <b>${r}</b> of ${B.n} leaders`}</span><div class="bar"><i style="width:${Math.min(100,n/T*100)}%"></i></div><span>${msg}</span><span class="more">Buds won so far: <b>${myWins.length}</b>${myWins.length?` (${myWins.map(sd).join(", ")})`:""} · best day ${fmt(best)}</span></div>`;
+      const statsP=`<div class="stats"><div><b class="num">${fmt(B.me.reduce((a,b)=>a+b,0))}</b><span>Your campaign policies</span></div><div><b class="num">${fmt(myWins.length)}</b><span>Buds you've won</span></div><div><b class="num">${fmt(B.winners[i])}</b><span>Leaders who won on ${sd(sel)}</span></div><div><b class="num">${fmt(B.winners.reduce((a,b)=>a+b,0))}</b><span>Buds won by all leaders</span></div></div>`;
+      const WN=B.winnerNames||[], tl={}; B.days.forEach((d,k)=>(WN[k]||[]).forEach(nm=>(tl[nm]=tl[nm]||[]).push(d)));
+      const tlist=Object.entries(tl).sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0]));
+      const winnersP=`<div><h2 style="font-size:14px;margin-bottom:6px">Buds 3 Pro+ winners</h2>${!future(sel)&&(WN[i]||[]).length?`<p class="more" style="margin-bottom:6px">Won on ${sd(sel)}: <b>${WN[i].map(esc).join(", ")}</b></p>`:""}${tlist.length?`<ul class="winlist">${tlist.map(([nm,ds])=>`<li><span>${esc(nm)}${nm===D.leaders[cur]?" (you)":""}</span><span class="num"><b>${ds.length}</b> · ${ds.map(sd).join(", ")}</span></li>`).join("")}</ul>`:`<p class="more">${x.st==="Upcoming"?"Winners show here from "+sd(c.start)+".":"No leader has hit "+fmt(T)+" in a day yet."}</p>`}</div>`;
+      return `<article class="camp">${head}${intro}${poster}<div><h2 style="font-size:14px;margin-bottom:6px">Pick a day</h2>${chipsP}</div>${youP}${statsP}${winnersP}</article>`}
+    const rk=[...B.leaders].sort((a,b)=>b[2][i]-a[2][i]||a[1].localeCompare(b[1]));
+    const tot=B.leaders.reduce((a,l)=>a+l[2].reduce((p,q)=>p+q,0),0), budsAll=B.days.reduce((a,d)=>a+wins(d).length,0);
+    const me=B.leaders.find(l=>l[0]===cur);
+    let you="";
+    if(me){const n=me[2][i], r=rk.findIndex(l=>l[0]===cur)+1, myWins=B.days.filter(d=>me[2][B.days.indexOf(d)]>=T), best=Math.max(...me[2]);
+      const msg=future(sel)?"This day hasn't started yet.":n>=T?`🏆 Target hit! Your team wins 1 Buds 3 Pro+ for ${sd(sel)}.`:sel===dd&&x.st==="Live"?`${fmt(T-n)} more policies today to win a Buds 3 Pro+.`:`${fmt(T-n)} short of ${fmt(T)} on ${sd(sel)}.`;
+      you=`<div class="you"><span class="more">Your team on ${sd(sel)}</span><span><b class="big num">${fmt(n)}</b> / ${fmt(T)} · rank <b>${r}</b> of ${rk.length}</span><div class="bar"><i style="width:${Math.min(100,n/T*100)}%"></i></div><span>${msg}</span><span class="more">Buds won so far: <b>${myWins.length}</b>${myWins.length?` (${myWins.map(sd).join(", ")})`:""} · best day ${fmt(best)}</span></div>`}
+    const stats=`<div class="stats"><div><b class="num">${fmt(tot)}</b><span>Campaign policies, all leaders</span></div><div><b class="num">${fmt(rk.reduce((a,l)=>a+l[2][i],0))}</b><span>Policies on ${sd(sel)}</span></div><div><b class="num">${fmt(wins(sel).length)}</b><span>Winners on ${sd(sel)}</span></div><div><b class="num">${fmt(budsAll)}</b><span>Buds won so far</span></div></div>`;
+    const list=future(sel)?'<p class="more">Ranking starts when this day\'s sales come in.</p>':`<ol class="rank">${rk.map((l,k)=>{const n=l[2][i],w=n>=T;return `<li class="${w?"win ":""}${l[0]===cur?"me":""}"><span class="rk">${k+1}</span><span class="who"><b>${esc(l[1])}${l[0]===cur?" (you)":""}</b><span class="bar"><i style="width:${Math.min(100,n/T*100)}%"></i></span></span><span class="n num">${w?"🏆 ":""}${fmt(n)}<small>${w?"Winner":`${fmt(T-n)} to go`}</small></span></li>`}).join("")}</ol>`;
+    const tally=B.leaders.map(l=>[l,B.days.filter(d=>l[2][B.days.indexOf(d)]>=T)]).filter(v=>v[1].length).sort((a,b)=>b[1].length-a[1].length);
+    const winners=`<div><h2 style="font-size:14px;margin-bottom:6px">Buds 3 Pro+ winners</h2>${tally.length?`<ul class="winlist">${tally.map(([l,ds])=>`<li><span>${esc(l[1])}</span><span class="num"><b>${ds.length}</b> · ${ds.map(sd).join(", ")}</span></li>`).join("")}</ul>`:`<p class="more">${x.st==="Upcoming"?"Winners show here from "+sd(c.start)+".":"No leader has hit "+fmt(T)+" in a day yet."}</p>`}</div>`;
+    return `<article class="camp">${head}${intro}${poster}${you}${stats}<div><h2 style="font-size:14px;margin-bottom:6px">Daily leader ranking</h2>${chips}</div>${list}${winners}</article>`;
+  }
+
+  function table(rows,all){
+    const ql=q.trim().toLowerCase(), hit=s=>!ql||String(s).toLowerCase().includes(ql);
+    let head,body,list,n;
+    if(tab==="Plan"){
+      const plans=(D.live&&D.live.plans)||[];
+      list=plans.map((p,i)=>{let c=0,m=0,o=0;rows.forEach(r=>{const v=r.pp[i];if(v){c+=v[0];m+=v[1];if(!r.x&&v[0])o++}});return {p,c,m,o}}).filter(x=>x.c&&hit(x.p)).sort((a,b)=>b.c-a.c);
+      const tc=list.reduce((a,x)=>a+x.c,0)||1, tm=list.reduce((a,x)=>a+x.m,0)||1; n=list.length;
+      head=`<th>#</th><th>Plan</th><th class="r">Policies</th><th class="r">Share</th><th class="r">Premium</th><th class="r">Premium share</th><th class="r">ASP</th><th class="r">OECs selling</th>`;
+      body=list.map((x,i)=>`<tr><td class="num">${i+1}</td><td>${esc(x.p)}</td><td class="r num">${fmt(x.c)}</td><td class="r num">${Math.round(x.c/tc*100)}%</td><td class="r num">${inr(x.m)}</td><td class="r num">${Math.round(x.m/tm*100)}%</td><td class="r num">${inr(x.m/x.c)}</td><td class="r num">${fmt(x.o)}</td></tr>`).join("");
+    } else if(tab==="OEC"||tab==="Zero sale"){
+      list=rows.filter(r=>(tab==="OEC"||(r.sale===0&&!r.x))&&[r.name,r.store,r.code,r.ose,r.asm,r.zsm,r.area].some(hit)).sort((a,b)=>b.sale-a.sale);
+      n=list.length; list=list.slice(0,300);
+      head=`<th>#</th><th>OEC</th><th>Code</th><th>Store</th><th>OSE</th><th>ASM</th><th>ZSM</th>${all?"<th>Leader</th>":""}<th class="r">Sales</th><th class="r">Premium</th><th class="r">ASP</th>${D.hasTargets?'<th class="r">Target</th><th class="r">Ach %</th>':""}`;
+      body=list.map((r,i)=>`<tr><td class="num">${i+1}</td><td>${esc(r.name)}</td><td class="hint">${esc(r.code)}</td><td>${esc(r.store)}</td><td>${esc(r.ose)}</td><td>${esc(r.asm)}</td><td>${esc(r.zsm)}</td>${all?`<td>${esc(D.leaders[r.lid])}</td>`:""}<td class="r num">${fmt(r.sale)}</td><td class="r num">${inr(r.prem)}</td><td class="r num">${r.sale?inr(r.prem/r.sale):"—"}</td>${D.hasTargets?`<td class="r num">${r.tgt==null?"—":fmt(r.tgt)}</td><td class="r num">${r.tgt?Math.round(r.sale/r.tgt*100)+"%":"—"}</td>`:""}</tr>`).join("");
+    } else {
+      const key={Leader:"lid",ZSM:"zsm",ASM:"asm",OSE:"ose",Area:"area"}[tab];
+      list=group(rows,key).filter(g=>hit(tab==="Leader"?D.leaders[g.key]+" "+g.key:g.key)||g.rows.some(r=>[r.name,r.store,r.code,r.ose,r.asm,r.zsm,r.area].some(hit)));
+      n=list.length;
+      head=`<th>#</th><th>${tab}</th>${tab==="Leader"?"<th>ID</th>":""}${tab==="OSE"?"<th>ASM</th>":""}${tab!=="OSE"?"<th class='r'>ASM</th>":""}${tab!=="OSE"?"<th class='r'>OSE</th>":""}<th class="r">OEC</th><th class="r">Selling</th><th class="r">Stores</th><th class="r">Sales</th><th class="r">Per OEC</th><th class="r">Premium</th><th class="r">ASP</th>${D.hasTargets?'<th class="r">Target</th><th class="r">Ach %</th>':""}<th>Active</th>`;
+      body=list.map((g,i)=>{const p=g.active/g.oec*100;return `<tr><td class="num">${i+1}</td><td>${esc(tab==="Leader"?D.leaders[g.key]:g.key)}</td>${tab==="Leader"?`<td class="hint">${esc(g.key)}</td>`:""}${tab==="OSE"?`<td>${esc(g.asm)}</td>`:""}${tab!=="OSE"?`<td class="r num">${g.sub.asm}</td><td class="r num">${g.sub.ose}</td>`:""}<td class="r num">${g.oec}</td><td class="r num">${g.active}</td><td class="r num">${g.sub.store}</td><td class="r num">${fmt(g.sale)}</td><td class="r num">${g.avg.toFixed(1)}</td><td class="r num">${inr(g.prem)}</td><td class="r num">${g.sale?inr(g.prem/g.sale):"—"}</td>${D.hasTargets?`<td class="r num">${g.target?fmt(g.target):"—"}</td><td class="r num">${g.target?`<span class="pill ${achPill(g.sale/g.target*100)}">${Math.round(g.sale/g.target*100)}%</span>`:"—"}</td>`:""}<td><span class="pill ${activePill(p)}">${Math.round(p)}%</span></td></tr>`}).join("");
+    }
+    $("tbl").innerHTML=`<thead><tr>${head}</tr></thead><tbody>${body||`<tr><td colspan="12">No matches.</td></tr>`}</tbody>`;
+    $("tblNote").textContent=n>300?`Showing the first 300 of ${fmt(n)}. Search to narrow it down.`:`${fmt(n)} rows`;
+  }
+
+  // ---------- Care+ Assistant ----------
+  const CH={open:false,ai:undefined,hist:[]};
+  const cTxt=s=>esc(s);
+  function cAdd(who,html){const d=document.createElement("div");d.className="m "+who;d.innerHTML=html;$("chatMsgs").appendChild(d);$("chatMsgs").scrollTop=1e9;return d}
+  function cRows(){return viewRows().rows}
+  function cSum(rows,a,b){let n=0,m=0;for(const r of rows)for(const [d,p,c,v] of r.ev) if(d>=a&&d<=b){n+=c;m+=v} return [n,m]}
+  function cPer(q){const t=(D.live&&D.live.date)||istToday();
+    if(/yesterday|kal\b/.test(q)){const y=addDays(t,-1);return [y,y,"yesterday"]}
+    if(/last month|previous month/.test(q)){const e=addDays(t.slice(0,8)+"01",-1);return [e.slice(0,8)+"01",e,"last month"]}
+    if(/week|weekly|hafta/.test(q)){const wd=(new Date(t+"T00:00:00Z").getUTCDay()+6)%7;return [addDays(t,-wd),t,"this week"]}
+    if(/month|monthly|mtd|november|mahina/.test(q)) return [t.slice(0,8)+"01",t,"this month"];
+    if(/today|aaj/.test(q)) return [t,t,"today"];
+    return null}
+  function cPerOf(r,a,b){let n=0,m=0;for(const [d,p,c,v] of r.ev) if(d>=a&&d<=b){n+=c;m+=v} return [n,m]}
+  function cFind(q,rows){const words=q.toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(w=>w.length>2&&!CSTOP.has(w));
+    if(!words.length) return [];
+    const score=r=>{const h=(r.name+" "+r.store+" "+r.code).toLowerCase();return words.filter(w=>h.includes(w)).length};
+    let best=0; const sc=rows.filter(r=>!r.x).map(r=>{const v=score(r);if(v>best)best=v;return [r,v]});
+    return best?sc.filter(x=>x[1]===best).map(x=>x[0]).slice(0,6):[]}
+  const CSTOP=new Set("how much many did does sold sell sale sales the what who which show tell today yesterday week month this last policies policy units unit of for and with from oec oecs store kitano kitne kya hai has have give me my our team total premium asp number count".split(" "));
+  function cAnswer(raw){
+    const q=raw.toLowerCase().trim(), all=viewRows().all, rows=cRows(), real=rows.filter(r=>!r.x), t=(D.live&&D.live.date)||istToday();
+    const P=cPer(q)||[t,t,"today"], [a,b,lab]=P;
+    const upd=`<p class="more" style="font-size:11px">Data updated ${cTxt($("stamp").textContent.replace(/^.*?updated\s*/,""))}</p>`;
+    if(/^(hi|hello|hey|namaste|help)\b/.test(q)||q==="?") return `<p>Hi ${cTxt((D.leaders[cur]||"").split(" ")[0]||"")}! Ask me things like:</p><ul><li>How many policies today / this week / this month?</li><li>Top OECs this month</li><li>Which OECs have no sale this month?</li><li>How much did <i>OEC or store name</i> sell?</li><li>My rank · My target · Campaign status</li></ul>`;
+    if(/rank|position/.test(q)){const L=D.lboard;
+      if(L&&L.me) return `<p>Your rank among project leaders:</p><ul><li>Today: <b>#${L.rankDay[0]}</b> of ${L.rankDay[1]}</li><li>This month: <b>#${L.rankMonth[0]}</b> of ${L.rankMonth[1]}</li></ul>${upd}`;
+      if(L&&L.leaders){const r=[...L.leaders].sort((x,y)=>y[2].reduce((p,c)=>p+c,0)-x[2].reduce((p,c)=>p+c,0));return `<p>Leaders by policies this month:</p><ul>${r.slice(0,5).map(l=>`<li>${cTxt(l[1])}: ${fmt(l[2].reduce((p,c)=>p+c,0))}</li>`).join("")}</ul><p>Lowest: ${r.slice(-3).map(l=>cTxt(l[1])).join(", ")}.</p>${upd}`}}
+    if(/campaign|buds|everyday win|prize/.test(q)){const c=(D.campaigns||[]).find(c=>c.daily_target), B=c&&D.board&&D.board[c.id];
+      if(!c) return "<p>There's no campaign running right now.</p>";
+      const st=t<c.start?"starts "+c.start:t>c.end?"has ended":"is live";
+      let h=`<p><b>${cTxt(c.name)}</b> ${st} (${c.start} to ${c.end}). Sell ${fmt(c.daily_target)} Care+ policies in a day to win 1 Buds 3 Pro+.</p>`;
+      if(B&&B.private){const i=B.days.indexOf(t);if(i>=0)h+=`<p>Your team today: <b>${fmt(B.me[i])}</b> of ${fmt(c.daily_target)}, rank ${B.ranks[i]} of ${B.n}. ${B.me[i]>=c.daily_target?"🏆 Target hit!":fmt(c.daily_target-B.me[i])+" more to win."}</p>`;
+        const w=B.days.filter((d,k)=>B.me[k]>=c.daily_target);h+=`<p>Buds you've won: <b>${w.length}</b>.</p>`}
+      return h+`<p>Open the Campaigns tab for the full board.</p>`}
+    if(/target|achiev|behind|gap/.test(q)){const dim=new Date(Date.UTC(+t.slice(0,4),+t.slice(5,7),0)).getUTCDate(), day=+t.slice(8,10);
+      const T=real.reduce((x,r)=>x+(r.target||0),0), [n]=cSum(rows,t.slice(0,8)+"01",t);
+      if(!T) return "<p>No targets are loaded yet.</p>";
+      const pace=n/day*dim;return `<p>This month: <b>${fmt(n)}</b> policies against a monthly target of <b>${fmt(T)}</b> (${Math.round(n/T*100)}%).</p><p>At this pace you'll end near ${fmt(pace)} (${Math.round(pace/T*100)}%). You need about ${fmt(Math.max(0,(T-n)/Math.max(1,dim-day)))} a day for the rest of the month.</p>${upd}`}
+    if(/zero|no sale|not sold|nil|inactive|did not sell|didn.t sell/.test(q)){const Pz=cPer(q)||[t.slice(0,8)+"01",t,"this month"];
+      const z=real.filter(r=>!cPerOf(r,Pz[0],Pz[1])[0]);
+      return `<p><b>${fmt(z.length)}</b> of ${fmt(real.length)} OECs have no sale ${Pz[2]}.</p>${z.length?`<ul>${z.slice(0,12).map(r=>`<li>${cTxt(r.name)} · ${cTxt(r.store)}</li>`).join("")}</ul>${z.length>12?`<p>…and ${fmt(z.length-12)} more. The full list is in the Zero sale tab and the Excel download.</p>`:""}`:""}${upd}`}
+    if(/top|best|highest|leader ?board/.test(q)){const Pt=cPer(q)||[t.slice(0,8)+"01",t,"this month"];
+      const L=real.map(r=>[r,...cPerOf(r,Pt[0],Pt[1])]).filter(x=>x[1]).sort((x,y)=>y[1]-x[1]).slice(0,10);
+      return L.length?`<p>Top OECs ${Pt[2]}:</p><ul>${L.map(([r,n,m])=>`<li>${cTxt(r.name)} (${cTxt(r.store)}): <b>${fmt(n)}</b> · ASP ${inr(m/n)}</li>`).join("")}</ul>${upd}`:`<p>No sales ${Pt[2]} yet.</p>`}
+    if(/plan|screen|warranty|damage/.test(q)){const plans=(D.live&&D.live.plans)||[], c={};
+      for(const r of rows)for(const [d,p,n,v] of r.ev) if(d>=a&&d<=b){c[p]=c[p]||[0,0];c[p][0]+=n;c[p][1]+=v}
+      const L=Object.entries(c).sort((x,y)=>y[1][0]-x[1][0]);
+      return L.length?`<p>Plan mix ${lab}:</p><ul>${L.map(([p,[n,m]])=>`<li>${cTxt(plans[p]||"Plan")}: <b>${fmt(n)}</b> · ${inr(m)}</li>`).join("")}</ul>${upd}`:`<p>No sales ${lab} yet.</p>`}
+    // name lookup: OEC / store / code
+    const hits=cFind(q,rows);
+    if(hits.length){const t0=t, wk=cPer("week"), mo=[t.slice(0,8)+"01",t];
+      return `${hits.map(r=>{const d=cPerOf(r,t0,t0),w=cPerOf(r,wk[0],wk[1]),m=cPerOf(r,mo[0],mo[1]);return `<p><b>${cTxt(r.name)}</b>${r.code&&r.code!=="NO-OEC"?" ("+cTxt(r.code)+")":""}<br><span class="more">${cTxt(r.store)}${all?" · "+cTxt(D.leaders[r.lid]||""):""}</span><br>Today <b>${fmt(d[0])}</b> · Week <b>${fmt(w[0])}</b> · Month <b>${fmt(m[0])}</b>${r.target?` of ${fmt(r.target)} target`:""}${m[0]?` · ASP ${inr(m[1]/m[0])}`:""}</p>`}).join("")}${upd}`}
+    if(/sale|sold|policies|policy|premium|asp|how many|kitne|total|units/.test(q)||cPer(q)){const [n,m]=cSum(rows,a,b), act=real.filter(r=>cPerOf(r,a,b)[0]).length;
+      return `<p>${all?"All teams":"Your team"} ${lab}: <b>${fmt(n)}</b> policies, <b>${inr(m)}</b> premium, ASP <b>${n?inr(m/n):"—"}</b>.</p><p>${fmt(act)} of ${fmt(real.length)} OECs sold.</p>${upd}`}
+    return null}
+  function cAiCtx(){const all=viewRows().all, rows=cRows(), real=rows.filter(r=>!r.x), t=(D.live&&D.live.date)||istToday(), plans=(D.live&&D.live.plans)||[];
+    const per=k=>{const P=cPer(k);const [n,m]=cSum(rows,P[0],P[1]);return `${P[2]} (${P[0]}..${P[1]}): ${n} policies, Rs ${Math.round(m)} premium`};
+    const mo=t.slice(0,8)+"01", top=real.map(r=>[r,...cPerOf(r,mo,t)]).sort((x,y)=>y[1]-x[1]);
+    const lines=[`Viewer: ${all?"admin (all leaders)":"project leader "+(D.leaders[cur]||cur)}. Data as of ${D.asof}.`,per("today"),per("yesterday"),per("this week"),per("this month"),per("last month"),
+      `OECs: ${real.length}; zero-sale this month: ${top.filter(x=>!x[1]).length}. Monthly target per OEC is mostly 5.`,
+      "OEC rows (name | store | ASM | OSE | month policies | today | target):",...top.slice(0,all?120:400).map(([r,n])=>`${r.name} | ${r.store} | ${r.asm} | ${r.ose}${all?" | leader "+(D.leaders[r.lid]||""):""} | ${n} | ${cPerOf(r,t,t)[0]} | ${r.target??""}`)];
+    if(D.lboard&&D.lboard.me) lines.push(`Own leader rank today #${D.lboard.rankDay[0]} of ${D.lboard.rankDay[1]}, month #${D.lboard.rankMonth[0]} of ${D.lboard.rankMonth[1]}.`);
+    if(all&&D.lboard&&D.lboard.leaders) lines.push("Leaders month totals: "+D.lboard.leaders.map(l=>`${l[1]} ${l[2].reduce((p,c)=>p+c,0)}`).join("; "));
+    return lines.join("\n")}
+  async function cAsk(raw){cAdd("me",cTxt(raw)); $("chatIn").value="";
+    const local=cAnswer(raw);
+    if(CH.ai){const box=cAdd("bot","Thinking…");
+      try{const msgs=[...CH.hist.slice(-6),{role:"user",content:`You are the OPPO Care+ sales assistant inside a leader's dashboard. Answer briefly in the language the question uses (English, Hindi or Bengali), using only the data below. If the data can't answer it, say so and suggest contacting Rik. Use plain text, short lines.\n\nDATA\n${cAiCtx()}\n\nQUESTION: ${raw}`}];
+        const r=await CH.ai(msgs,{modelTier:"quick",cache:false,onText:({text})=>{box.textContent=text;$("chatMsgs").scrollTop=1e9}});
+        box.textContent=r.text; CH.hist.push({role:"user",content:raw},{role:"assistant",content:r.text}); return}
+      catch(e){ if(e&&e.code==="not_granted"){CH.ai=null;$("chatMode").textContent="Answers from your dashboard data"} box.remove() } }
+    cAdd("bot",local||`<p>Sorry, I couldn't work that out from the dashboard data.</p><p>Try asking about sales today / this week / this month, top OECs, no-sale OECs, your rank, target or the campaign, or type an OEC or store name.</p>${CONTACT?`<p>For anything else, <a href="${CONTACT}" target="_blank" rel="noopener">message Rik on WhatsApp</a>.</p>`:"<p>For anything else, please message Rik.</p>"}`)}
+  const CONTACT=""; // optional WhatsApp link for "ask Rik", e.g. https://wa.me/91XXXXXXXXXX
+  function cSugg(){const s=["Sales today","This month","Top OECs this week","No sale this month","My rank","My target","Campaign status"];
+    $("chatSugg").innerHTML=s.map(x=>`<button type="button">${x}</button>`).join("");
+    $("chatSugg").querySelectorAll("button").forEach(b=>b.onclick=()=>cAsk(b.textContent))}
+  function chatOpen(){$("chat").hidden=false;$("chatOpen").hidden=true;CH.open=true;
+    if(!$("chatMsgs").children.length){cAdd("bot",cAnswer("hi"));cSugg()} setTimeout(()=>$("chatIn").focus(),50);
+    if(CH.ai===undefined){CH.ai=null; (window.claude&&claude.use?claude.use("sample"):Promise.resolve(null)).then(s=>{CH.ai=s||null; if(s) $("chatMode").textContent="AI answers from your dashboard data"}).catch(()=>{})}}
+  $("chatOpen").onclick=chatOpen;
+  $("chatClose").onclick=()=>{$("chat").hidden=true;$("chatOpen").hidden=!D;CH.open=false};
+  $("chatForm").addEventListener("submit",e=>{e.preventDefault();const v=$("chatIn").value.trim();if(v&&D)cAsk(v)});
+  new MutationObserver(()=>{const on=!$("desk").hidden; $("chatOpen").hidden=!on||CH.open; if(!on){$("chat").hidden=true;CH.open=false;$("chatMsgs").innerHTML="";CH.hist=[]}}).observe($("desk"),{attributes:true,attributeFilter:["hidden"]});
+})();
+</script>
